@@ -24,6 +24,10 @@ with db_session:
     e2 = Expense(amount = 5, category = c2, comment = 'beef' )
 
 
-print(c1.get_id())
+
+with db_session:
+    b1 = Budget( name = 'Daily', current = 0 , budg = 100)
+    b2 = Budget( name = 'Weekly', current = 0 , budg = 1000)
+    b3 = Budget( name = 'Monthly', current = 0 , budg = 10000)
+
 # db.drop_all_tables(with_all_data = True)
-print((datetime.datetime.now()))
