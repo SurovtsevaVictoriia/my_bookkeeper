@@ -12,12 +12,18 @@ db.generate_mapping(create_tables=True)
 
 
 with db_session:   
-    c = Category(name = 'All') 
+    c = Category(name = 'All')
+print('c', c.get_id()) 
+
+with db_session:
     c1 = Category(name = 'Fooood', parent = c.id)
     e1 = Expense(amount = 3, category = c1, comment = 'cheese')
+
+with db_session:   
     c2 = Category(name = 'Meats', parent = c1.id)
     e2 = Expense(amount = 5, category = c2, comment = 'beef' )
 
-print(c1.id)
+
+print(c1.get_id())
 # db.drop_all_tables(with_all_data = True)
-# print(type(datetime.datetime.now()))
+print((datetime.datetime.now()))
