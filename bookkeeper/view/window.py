@@ -68,6 +68,7 @@ def expenses_table_widget():
 
     expenses_table.verticalHeader().hide()
     return expenses_table
+
 def budget_table_widget():
     budget_table = QtWidgets.QTableWidget(3, 2)
     budget_table.setHorizontalHeaderLabels(
@@ -84,7 +85,48 @@ def budget_table_widget():
     header.setSectionResizeMode(
         2, QtWidgets.QHeaderView.ResizeToContents)
 
+    set_data(budget_table, [['0', '100'],
+                            ['0', '200'],
+                            ['0', '1000'] ])
     return budget_table
+
+
+def set_data(table:QtWidgets.QTableWidget, data:list[list[str]]):
+    for i, row in enumerate(data):
+        for j, x in enumerate(row):
+            table.setItem(
+                i, j,
+                QtWidgets.QTableWidgetItem(x.capitalize())
+            )
+
+def add_expense_layout(cats:list[str] = list(['Еда', 'Одежда'])):
+    hv = QtWidgets.QVBoxLayout()
+
+    hl1 = QtWidgets.QHBoxLayout() 
+    hl1.addWidget(QtWidgets.QLabel('Сумма'))
+    hl1.addWidget(QtWidgets.QLineEdit(''))
+
+
+    combobox = QtWidgets.QComboBox()
+    combobox.addItems(cats)
+    hl2 = QtWidgets.QHBoxLayout()
+    hl2.addWidget(QtWidgets.QLabel('Категория'))
+    hl2.addWidget(combobox)
+    hl2.addWidget(QtWidgets.QPushButton('Редактировать'))
+
+    hl3 = QtWidgets.QHBoxLayout()
+    hl3.addWidget(QtWidgets.QLabel('Комментарий'))
+    hl3.addWidget(QtWidgets.QTextEdit())
+
+    hl4 = QtWidgets.QHBoxLayout()
+    hl4.addWidget(QtWidgets.QPushButton('Добавить'))
+
+
+    hv.addLayout(hl1)
+    hv.addLayout(hl2)
+    hv.addLayout(hl3)
+    hv.addLayout(hl4)
+    return hv
 
 class BasicLaypout(QtWidgets.QWidget):
     def __init__(self):
@@ -95,6 +137,7 @@ class BasicLaypout(QtWidgets.QWidget):
         verticalLayout = QtWidgets.QVBoxLayout(self)
         verticalLayout.addWidget(expenses_table_widget())
         verticalLayout.addWidget(budget_table_widget())
+        verticalLayout.addLayout(add_expense_layout())
         self.show()
         
 
