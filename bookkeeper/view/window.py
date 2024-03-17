@@ -2,61 +2,6 @@ import sys
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 
-# app = QtWidgets.QApplication(sys.argv)
-
-# window = QtWidgets.QMainWindow()
-# window.setWindowTitle('Bookkeeper')
-# window.resize(300, 100)
-
-# # status = QtWidgets.QStatusBar()
-# # status.showMessage('Loh')
-# # window.setStatusBar(status)
-
-# central_widget = QtWidgets.QWidget()
-# window.setCentralWidget(central_widget)
-
-
-# vertical_layout = QtWidgets.QVBoxLayout()
-# vertical_layout.addWidget(QtWidgets.QLabel('widget on v_layout'))
-
-# # lcd = QtWidgets.QLCDNumber(11)
-# # lcd.display('BRUH')
-# # vertical_layout.addWidget(lcd)
-
-# # prog_bar = QtWidgets.QProgressBar()
-# # prog_bar.setValue(66)
-# # prog_bar.setFormat('QprogressBar (%p%) ...')
-# # prog_bar.setAlignment(Qt.AlignCenter)
-# # vertical_layout.addWidget(prog_bar)
-
-# central_widget.setLayout(vertical_layout)
-# # central_widget.setToolTip('chmo') #show when cursor hovers over
-
-
-
-# def widget_with_label(text, widget):
-#     hl = QtGui.QVBoxLayout()
-#     hl.addWidget(QtWidgets.QLabel(text))
-#     hl.addWidget(widget)
-#     return hl
-
-# vertical_layout.addChildLayout(
-#     widget_with_label('QlineEdit', 
-#                       QtWidgets.QLineEdit('QLINE oneline only'))
-# )
-# print('hehe')
-
-# # vertical_layout.addChildLayout(
-# #     widget_with_label('QTextEdit', 
-# #                       QtWidgets.QTextEdit('oneline'
-# #                                           'secondline'))
-# # )
-# print('he')
-# # vertical_layout.addChildWidget( QtWidgets.QTextEdit('oneline''secondline'))
-
-# window.show()
-
-# sys.exit(app.exec())
 
 class Example(QtWidgets.QWidget):
 
@@ -94,39 +39,71 @@ class ExpenseTable(QtWidgets.QWidget):
         super(ExpenseTable, self).__init__()
         self.initUI()
 
-    def initUI(self):
-        expenses_table = QtWidgets.QTableWidget(4, 20)
-        expenses_table.setColumnCount(4)
-        expenses_table.setRowCount(20)
-        expenses_table.setHorizontalHeaderLabels(
-            "Дата Сумма Категория Комментарий".split()
-        )
-
-        header = expenses_table.horizontalHeader()
-        header.setSectionResizeMode(
-            0, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(
-            1, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(
-            2, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(
-            3, QtWidgets.QHeaderView.ResizeToContents)
-        
-        # expenses_table.setEditTriggers(
-        #     QtWidgets.QAbstractItemView.NoEditTriggers
-        # ) this disables editing
-        
-        expenses_table.verticalHeader().hide()
+    def initUI(self):        
 
         verticalLayout = QtWidgets.QVBoxLayout(self)
-        verticalLayout.addWidget(expenses_table)
+        verticalLayout.addWidget(expenses_table_widget())
         self.show()
     
+def expenses_table_widget():
+    expenses_table = QtWidgets.QTableWidget(4, 5)
+    expenses_table.setColumnCount(4)
+    expenses_table.setRowCount(5)
+    expenses_table.setHorizontalHeaderLabels(
+        "Дата Сумма Категория Комментарий".split()
+    )
+    header = expenses_table.horizontalHeader()
+    header.setSectionResizeMode(
+        0, QtWidgets.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(
+        1, QtWidgets.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(
+        2, QtWidgets.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(
+        3, QtWidgets.QHeaderView.ResizeToContents)
+    
+    # expenses_table.setEditTriggers(
+    #     QtWidgets.QAbstractItemView.NoEditTriggers
+    # ) this disables editing
+
+    expenses_table.verticalHeader().hide()
+    return expenses_table
+def budget_table_widget():
+    budget_table = QtWidgets.QTableWidget(3, 2)
+    budget_table.setHorizontalHeaderLabels(
+        "Потрачено Бюджет".split()
+    )
+    budget_table.setVerticalHeaderLabels(
+        "День Неделя Месяц".split()
+    )
+    header = budget_table.horizontalHeader()
+    header.setSectionResizeMode(
+        0, QtWidgets.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(
+        1, QtWidgets.QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(
+        2, QtWidgets.QHeaderView.ResizeToContents)
+
+    return budget_table
+
+class BasicLaypout(QtWidgets.QWidget):
+    def __init__(self):
+        super(BasicLaypout, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        verticalLayout = QtWidgets.QVBoxLayout(self)
+        verticalLayout.addWidget(expenses_table_widget())
+        verticalLayout.addWidget(budget_table_widget())
+        self.show()
+        
+
 def main():
     print('in main')
     app = QtWidgets.QApplication( sys.argv )
     # ex = Example() #works
-    et = ExpenseTable() #works!
+    # et = ExpenseTable() #works!
+    bl = BasicLaypout()
     sys.exit( app.exec_() )
 
 
