@@ -7,4 +7,6 @@ class Budget(db.Entity):
     current = Required(int)
     budg = Required(int)
 
+    
+
 
