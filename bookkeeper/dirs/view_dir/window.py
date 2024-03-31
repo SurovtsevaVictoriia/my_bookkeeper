@@ -8,7 +8,7 @@ from .add_expense import AddExpenseWidget
 # from . import view_budget
 # from . import view_expense
 # from . import add_expense
-from ..presenter_dir import presenter
+from ..presenter_dir.presenter import presenter
 
 class BasicLaypout(QtWidgets.QWidget):
     def __init__(self):

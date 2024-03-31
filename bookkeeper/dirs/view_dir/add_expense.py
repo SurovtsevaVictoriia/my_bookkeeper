@@ -1,5 +1,6 @@
 
 import sys
+import datetime
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt 
 
@@ -13,8 +14,9 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.vbox = QtWidgets.QVBoxLayout()
 
         self.hl1 = QtWidgets.QHBoxLayout() 
+        self.amount_widget = QtWidgets.QLineEdit('')
         self.hl1.addWidget(QtWidgets.QLabel('Сумма'))
-        self.hl1.addWidget(QtWidgets.QLineEdit(''))
+        self.hl1.addWidget(self.amount_widget)
 
 
         self.tree = QtWidgets.QTreeWidget()
@@ -26,11 +28,15 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.hl2.addWidget(QtWidgets.QPushButton('Редактировать'))
 
         self.hl3 = QtWidgets.QHBoxLayout()
+        self.comment_widget = QtWidgets.QTextEdit()
         self.hl3.addWidget(QtWidgets.QLabel('Комментарий'))
-        self.hl3.addWidget(QtWidgets.QTextEdit())
+        self.hl3.addWidget(self.comment_widget)
 
+        # add expense
         self.hl4 = QtWidgets.QHBoxLayout()
-        self.hl4.addWidget(QtWidgets.QPushButton('Добавить'))
+        add_button = QtWidgets.QPushButton('Добавить')
+        self.hl4.addWidget(add_button)
+        add_button.clicked.connect(self.add_expense)
 
         self.vbox.addWidget(self.label)
         self.vbox.addLayout(self.hl1)
@@ -59,3 +65,14 @@ class AddExpenseWidget(QtWidgets.QWidget):
                 items[category.parent - 1].addChild(items[i])
 
         self.tree.insertTopLevelItems(0, items)
+
+    def add_expense(self):
+        date  = datetime.datetime.now()
+        # print(self.amount_widget.text())
+        amount = int(self.amount_widget.text()) #TODO : check datatype
+        amount = 15
+        category_name = self.tree.currentItem().text(0)
+        comment = self.comment_widget.toPlainText()
+        presenter.add_expense(date, amount, category_name, comment)
+        # TODO: clear cells for add item after addition
+        print('add button clicked')

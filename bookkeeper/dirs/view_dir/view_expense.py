@@ -21,6 +21,8 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         self.expenses_table.setHorizontalHeaderLabels(
             "Дата Сумма Категория Комментарий".split()
         )
+       
+
         header = self.expenses_table.horizontalHeader()
         header.setSectionResizeMode(
             0, QtWidgets.QHeaderView.ResizeToContents)
@@ -45,3 +47,6 @@ class ExpenseTableWidget(QtWidgets.QWidget):
     def Update(self):        
         data = expense.get_all()
         utils.set_data(self.expenses_table, data)
+
+    
+        

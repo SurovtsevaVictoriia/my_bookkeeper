@@ -32,3 +32,16 @@ class Model():
         monthly = orm.sum(e.amount for e in Expense if e.date > firstDayTime)
 
         return daily, weekly, monthly
+    
+
+    @orm.db_session
+    def add_expense(self, _date, _amount, _category, _comment ):
+        Expense(date = _date, amount = _amount, category = _category, comment = _comment)
+
+    @orm.db_session
+    def delete_expense(self, _id):
+        Expense[_id].delete()
+
+    @orm.db_session
+    def get_cat_id_by_name(self, cat_name):
+        return Category.get(name = cat_name).id
