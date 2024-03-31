@@ -18,4 +18,9 @@ def add_expense(_date, _amount, _category, _comment ):
 @db_session
 def delete_expense(_id):
     Expense[_id].delete()
+
+@db_session
+def get_all():
+    data = Expense.select(lambda e: e)
+    return data
     

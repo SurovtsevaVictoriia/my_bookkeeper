@@ -3,6 +3,12 @@ import sys
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt 
 
+import os
+cwd = os.getcwd()
+print(cwd)
+from ..models.base import db
+# from ..models import expense
+import utils
 
 class ExpenseTableWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
@@ -34,4 +40,10 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         self.vbox.addWidget(self.label)
         self.vbox.addWidget(self.expenses_table)
         self.setLayout(self.vbox)
+        self.Update()
+
+    def Update(self):
+        data = expense.get_all()
+        utils.set_data(self.expenses_table, data)
+
         
