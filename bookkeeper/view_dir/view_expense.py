@@ -6,8 +6,8 @@ from PySide6.QtCore import Qt
 import os
 cwd = os.getcwd()
 print(cwd)
-from ..models.base import db
-# from ..models import expense
+from ..models_dir.base import db
+from ..models_dir import expense
 import utils
 
 class ExpenseTableWidget(QtWidgets.QWidget):

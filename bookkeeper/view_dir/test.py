@@ -1,6 +1,6 @@
 import sys
 # print(sys.path)
 
-from ..models import *
+from ..models_dir import *
 
 print('ok')  

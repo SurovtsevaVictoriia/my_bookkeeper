@@ -1,9 +1,9 @@
 from pony.orm import *
-from models import db, Category, Budget, Expense
-from models import budget, category, expense
+from models_dir import db, Category, Budget, Expense
+from models_dir import budget, category, expense
 import settings
 import datetime
-from dateutil.relativedelta import relativedelta, MO
+
 
 db.bind(**settings.db_params)
 db.generate_mapping(create_tables=True)
