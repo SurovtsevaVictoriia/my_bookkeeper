@@ -8,5 +8,11 @@ class Category(db.Entity):
     expenses = Set('Expense')
 
     @db_session
-    def get_id(this):
-        return this.id
+    def get_id(self):
+        return self.id
+    
+    @staticmethod
+    @db_session
+    def get_all():
+        query = Category.select()
+        return query[:]

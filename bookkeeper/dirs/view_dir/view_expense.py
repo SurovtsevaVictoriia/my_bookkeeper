@@ -4,8 +4,8 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Qt 
 
 import os
-cwd = os.getcwd()
-print(cwd)
+# cwd = os.getcwd()
+# print(cwd)
 from ..models_dir.base import db
 from ..models_dir import expense
 from . import utils

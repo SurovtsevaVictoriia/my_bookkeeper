@@ -3,6 +3,8 @@ import sys
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt 
 
+from ..presenter_dir.presenter import presenter
+
 class AddExpenseWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -14,11 +16,14 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.hl1.addWidget(QtWidgets.QLabel('Сумма'))
         self.hl1.addWidget(QtWidgets.QLineEdit(''))
 
-        self.combobox = QtWidgets.QComboBox()
-        self.combobox.addItems(['a', 'b'])
+        # self.combobox = QtWidgets.QComboBox()
+        # self.combobox.addItems(['a', 'b'])
+        self.tree = QtWidgets.QTreeWidget()
+        self.tree.setColumnCount(1)
+        self.tree.setHeaderLabels(["Тип"])
         self.hl2 = QtWidgets.QHBoxLayout()
         self.hl2.addWidget(QtWidgets.QLabel('Категория'))
-        self.hl2.addWidget(self.combobox)
+        self.hl2.addWidget(self.tree)
         self.hl2.addWidget(QtWidgets.QPushButton('Редактировать'))
 
         self.hl3 = QtWidgets.QHBoxLayout()
@@ -34,3 +39,24 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.vbox.addLayout(self.hl3)
         self.vbox.addLayout(self.hl4)
         self.setLayout(self.vbox)
+
+        self.update_tree()
+
+    def update_tree(self):
+        categories = presenter.get_categories()
+        
+        items = []
+        roots = []
+        for category in categories:
+            if not category.parent:
+                roots.append(category)
+            
+            item = QtWidgets.QTreeWidgetItem([category.name])
+            items.append(item)
+       
+        # category.parent - 1, так как id в таблицы начинаются с единицы
+        for i, category in enumerate(categories):
+            if category.parent:
+                items[category.parent - 1].addChild(items[i])
+
+        self.tree.insertTopLevelItems(0, items)
