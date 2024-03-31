@@ -3,6 +3,7 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from . import utils
 # import utils
+from ..presenter_dir.presenter import presenter
 
 class BudgetTableWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
@@ -25,13 +26,17 @@ class BudgetTableWidget(QtWidgets.QWidget):
         self.header.setSectionResizeMode(
             2, QtWidgets.QHeaderView.ResizeToContents)
 
-        utils.set_data(self.budget_table, [['0', '100'],
-                                ['0', '200'],
-                                ['0', '1000'] ])
+        self.update_budget()
         
         self.vbox = QtWidgets.QVBoxLayout()
         self.vbox.addWidget(self.label)
         self.vbox.addWidget(self.budget_table)
         self.setLayout(self.vbox)
     
+    def update_budget(self):
+        daily, weekly, monthly = presenter.calculate_expenses()
+        utils.set_data(self.budget_table, [[str(daily), str(presenter.daily_budget)], 
+                                           [str(weekly), str(presenter.weekly_budget)], 
+                                           [str(monthly), str(presenter.monthly_budget)]])
+
     

@@ -1,12 +1,11 @@
 from pony.orm import *
-from models_dir import db, Category, Budget, Expense
-from models_dir import budget, category, expense
-import bookkeeper.dirs.models_dir.settings as settings
+from dirs.models_dir import *
+import dirs.models_dir.settings as settings
 import datetime
 
 
-db.bind(**settings.db_params)
-db.generate_mapping(create_tables=True)
+# db.bind(**settings.db_params)
+# db.generate_mapping(create_tables=True)
 
 
 @db_session
@@ -34,12 +33,12 @@ def recalculate_budget():
     monthly = sum(e.amount for e in Expense if e.date > firstDayTime)
 
 
-    # Budget.get(name = "Daily").current = daily
-    # Budget.get(name = "Weekly").current = weekly
-    # Budget.get(name = "Monthly").current = monthly
-    Budget[1].current = daily
-    Budget[2].current = weekly
-    Budget[3].current = monthly
+    # # Budget.get(name = "Daily").current = daily
+    # # Budget.get(name = "Weekly").current = weekly
+    # # Budget.get(name = "Monthly").current = monthly
+    # Budget[1].current = daily
+    # Budget[2].current = weekly
+    # Budget[3].current = monthly
 
 # # recalculate_budget()
 # with db_session:

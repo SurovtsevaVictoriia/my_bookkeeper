@@ -1,12 +1,18 @@
 from pony.orm import *
-from models_dir import db, Category, Budget, Expense
-from models_dir import budget, category, expense
-import tester
-import bookkeeper.dirs.models_dir.settings as settings
+from dirs.models_dir import model
+from dirs.models_dir import db, Category, Budget, Expense
+# from dirs.models_dir import budget, category, expense
+# from dirs.models_dir import *
+# from dirs.models_dir.expense import Expense
+# import tester
+import dirs.models_dir.settings as settings
 import datetime
 
-db.bind(**settings.db_params)
-db.generate_mapping(create_tables=True)
+
+# from dirs.models_dir.model import db as db
+
+# db.bind(**settings.db_params)
+# db.generate_mapping(create_tables=True)
 
 
 # db.create_tables()
@@ -32,6 +38,6 @@ with db_session:
     b2 = Budget( name = 'Weekly', current = 0 , budg = 1000)
     b3 = Budget( name = 'Monthly', current = 0 , budg = 10000)
 
-tester.recalculate_budget()
+# tester.recalculate_budget()
 
 # db.drop_all_tables(with_all_data = True)

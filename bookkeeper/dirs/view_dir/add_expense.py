@@ -16,8 +16,7 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.hl1.addWidget(QtWidgets.QLabel('Сумма'))
         self.hl1.addWidget(QtWidgets.QLineEdit(''))
 
-        # self.combobox = QtWidgets.QComboBox()
-        # self.combobox.addItems(['a', 'b'])
+
         self.tree = QtWidgets.QTreeWidget()
         self.tree.setColumnCount(1)
         self.tree.setHeaderLabels(["Тип"])
