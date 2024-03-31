@@ -1,9 +1,12 @@
 import sys
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
-from view_budget import BudgetTableWidget
-from view_expense import ExpenseTableWidget
-from add_expense import AddExpenseWidget
+from .view_budget import BudgetTableWidget
+from .view_expense import ExpenseTableWidget
+from .add_expense import AddExpenseWidget
+# from . import view_budget
+# from . import view_expense
+# from . import add_expense
 
 class BasicLaypout(QtWidgets.QWidget):
     def __init__(self):
@@ -24,11 +27,9 @@ class BasicLaypout(QtWidgets.QWidget):
         self.show()
         
 
-def main():
-    print('in main')
+def start_app():
+    print('in strart app')
     app = QtWidgets.QApplication( sys.argv )
-    # ex = Example() #works
-    # et = ExpenseTable() #works!
     bl = BasicLaypout()
     sys.exit( app.exec_() )
 
@@ -38,5 +39,6 @@ def main():
 #         main()
 #     except Exception as e:
 #         print(e.message)
-
-main()
+if __name__ == '__main__':
+    print('in window.py')
+    start_app()

@@ -3,7 +3,7 @@ from ..models_dir import db, Category, Budget, Expense
 # from ..models import budget, category, expense
 # from ..models.base import db
 
-from bookkeeper import settings
+from bookkeeper.dirs import settings
 import datetime
 
 

@@ -8,7 +8,7 @@ cwd = os.getcwd()
 print(cwd)
 from ..models_dir.base import db
 from ..models_dir import expense
-import utils
+from . import utils
 
 class ExpenseTableWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
@@ -42,8 +42,6 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         self.setLayout(self.vbox)
         self.Update()
 
-    def Update(self):
+    def Update(self):        
         data = expense.get_all()
         utils.set_data(self.expenses_table, data)
-
-        

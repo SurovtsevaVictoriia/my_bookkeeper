@@ -1,8 +1,8 @@
 import sys
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
-import utils
-
+from . import utils
+# import utils
 
 class BudgetTableWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):

@@ -1,7 +1,7 @@
 from pony.orm import *
 from models_dir import db, Category, Budget, Expense
 from models_dir import budget, category, expense
-import settings
+import bookkeeper.dirs.settings as settings
 import datetime
 
 

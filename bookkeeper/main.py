@@ -3,20 +3,17 @@ import sys
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 
-import presenter_dir
-import models_dir
-import view_dir
+# import presenter_dir
+import dirs.models_dir as models_dir
+import dirs.view_dir as view_dir
 
-from . import settings
+from dirs import settings
 
 db = models_dir.db 
 db.bind(**settings.db_params)
 db.generate_mapping(create_tables=True)
 
 
-print('in main')
-app = QtWidgets.QApplication( sys.argv )
-# ex = Example() #works
-# et = ExpenseTable() #works!
-bl = view_dir.BasicLaypout()
-# sys.exit( app.exec_() )
+data = models_dir.expense.get_all()
+print(data)
+view_dir.window.start_app()
