@@ -61,8 +61,8 @@ class _Presenter(QtCore.QObject):
                     'monthly': self.monthly_budget}
             json.dump(data, f)    
 
-    
-    def update_budget(self):
+    # has qt
+    def update_budget(self): 
         daily, weekly, monthly = self.calculate_expenses()
         utils.set_data(self.window.bl.budget.budget_table, [[str(daily), str(self.daily_budget)], 
                                            [str(weekly), str(self.weekly_budget)], 
@@ -70,7 +70,7 @@ class _Presenter(QtCore.QObject):
         for i in range(self.window.bl.budget.budget_table.rowCount()): #make sum uneditable
             item = self.window.bl.budget.budget_table.item(i, 0)
             item.setFlags(Qt.NoItemFlags)   
-        
+    # has qt  
     def on_budget_changed(self, row, col):
         # print('changed something', row, col)
         if (row, col) == (0, 1):
@@ -85,6 +85,7 @@ class _Presenter(QtCore.QObject):
         categories = self.model.get_categories()
         return categories
     
+    # has qt
     def update_tree(self):
         print('in update tree')
         categories = self.get_categories()
@@ -105,7 +106,7 @@ class _Presenter(QtCore.QObject):
                 items[category.parent - 1].addChild(items[i])
 
         self.window.bl.add_expense.tree.insertTopLevelItems(0, items)
-
+    # has qt
     def update_expenses(self):
         data = self.model.get_all_expenses()
         self.window.bl.expenses.expenses_table.setRowCount(len(data))
@@ -114,16 +115,14 @@ class _Presenter(QtCore.QObject):
         for i in range(len(data)):            
             deleteButton = QtWidgets.QPushButton("удалить")
             self.window.bl.expenses.expenses_table.setCellWidget(i, 4, deleteButton)
-            deleteButton.clicked.connect(self.delete_clicked_expense)
+            deleteButton.clicked.connect(lambda x: self.delete_clicked_expense(x))
             
-
-
-            
-            
+    # has qt
     @QtCore.Slot()
-    def delete_clicked_expense(self):
-        button = self.window.bl.expenses.sender()
+    def delete_clicked_expense(self, x):
+
         button = self.sender()
+        button = x
         print(button)
        
         if button:
@@ -136,7 +135,7 @@ class _Presenter(QtCore.QObject):
             amount = self.window.bl.expenses.expenses_table.item(row, 1).text()
             category = self.window.bl.expenses.expenses_table.item(row, 2).text()
             category = self.model.get_cat_id_by_name(category)
-            
+
             comment = self.window.bl.expenses.expenses_table.item(row, 3).text()
 
             id = self.model.get_expense_id_by_params(date, amount, category, comment)
@@ -146,6 +145,7 @@ class _Presenter(QtCore.QObject):
             self.update_expenses()
             self.update_budget()
 
+    #has qt
     def add_expense(self):
         date  = datetime.datetime.now()
         # print(self.amount_widget.text())

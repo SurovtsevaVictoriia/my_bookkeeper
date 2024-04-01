@@ -26,7 +26,8 @@ class BudgetTableWidget(QtWidgets.QWidget):
             0, QtWidgets.QHeaderView.ResizeToContents)
         self.header.setSectionResizeMode(
             1, QtWidgets.QHeaderView.ResizeToContents)
-        self.header.setSectionResizeMode(            2, QtWidgets.QHeaderView.ResizeToContents)
+        self.header.setSectionResizeMode(            
+            2, QtWidgets.QHeaderView.ResizeToContents)
 
         
         
