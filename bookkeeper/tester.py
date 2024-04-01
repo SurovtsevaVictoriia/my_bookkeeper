@@ -1,48 +1,34 @@
-from pony.orm import *
-from dirs.models_dir import *
-import dirs.models_dir.settings as settings
-import datetime
+from PySide6 import QtCore, QtGui, QtWidgets
 
+class WidgetGallery(QtWidgets.QDialog):
+    def __init__(self, parent=None):
+        super(WidgetGallery, self).__init__(parent)
+        self.table = QtWidgets.QTableWidget(10, 3)
+        col_1 = QtWidgets.QTableWidgetItem("first_col")
+        col_2 =QtWidgets.QTableWidgetItem("second_col")
+        deleteButton = QtWidgets.QPushButton("delete_this_row")
+        deleteButton.clicked.connect(self.deleteClicked)
+        for i in range(0, 10):
+            deleteButton = QtWidgets.QPushButton("delete_this_row")
+            deleteButton.clicked.connect(self.deleteClicked)
+            self.table.setItem(i, 0, col_1)
+            self.table.setItem(i, 1, col_2)
+            self.table.setCellWidget(i, 2, deleteButton)
+        self.mainLayout = QtWidgets.QGridLayout(self)
+        self.mainLayout.addWidget(self.table)
 
-# db.bind(**settings.db_params)
-# db.generate_mapping(create_tables=True)
+    @QtCore.Slot()
+    def deleteClicked(self):
+        button = self.sender()
+        print(button)
+        if button:
+            row = self.table.indexAt(button.pos()).row()
+            print(row)
+            self.table.removeRow(row)
 
-
-@db_session
-def get_data(db, table_name):
-    data = db.select("select * from " + table_name)
-    return data
-
-# print(get_data(db, 'Expense'))
-# with db_session:
-#     data = Expense.select(lambda e: e.amount > 3)
-#     for e in data:
-#         print(e.comment)
-@db_session
-def recalculate_budget():
-    now = datetime.datetime.now()
-    today = datetime.date.today()   
-    todayTime = datetime.datetime(today.year, today.month, today.day)
-    lastMonday = today + datetime.timedelta(days=today.weekday())
-    lastMondayTime = datetime.datetime(lastMonday.year, lastMonday.month, lastMonday.day )
-    firstDayTime = datetime.datetime(today.year, today.month, 1)
-    print(firstDayTime, lastMondayTime, todayTime )
-    
-    daily = sum(e.amount for e in Expense if e.date > todayTime)
-    weekly = sum(e.amount for e in Expense if e.date > lastMondayTime)
-    monthly = sum(e.amount for e in Expense if e.date > firstDayTime)
-
-
-    # # Budget.get(name = "Daily").current = daily
-    # # Budget.get(name = "Weekly").current = weekly
-    # # Budget.get(name = "Monthly").current = monthly
-    # Budget[1].current = daily
-    # Budget[2].current = weekly
-    # Budget[3].current = monthly
-
-# # recalculate_budget()
-# with db_session:
-#     print (Expense[2].category.name)
-
-expense.add_expense(datetime.datetime.now(), 10, 2, 'shit')
-expense.delete_expense(5)
+if __name__ == '__main__':
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    w = WidgetGallery()
+    w.show()
+    sys.exit(app.exec_())

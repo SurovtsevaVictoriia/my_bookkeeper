@@ -16,10 +16,10 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         self.label = QtWidgets.QLabel('Расходы')
 
         self.expenses_table = QtWidgets.QTableWidget(4, 5)
-        self.expenses_table.setColumnCount(4)
+        self.expenses_table.setColumnCount(5)
         self.expenses_table.setRowCount(5)
         self.expenses_table.setHorizontalHeaderLabels(
-            "Дата Сумма Категория Комментарий".split()
+            "Дата Сумма Категория Комментарий Удалить".split()
         )
        
 
@@ -32,6 +32,9 @@ class ExpenseTableWidget(QtWidgets.QWidget):
             2, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(
             3, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(
+            4, QtWidgets.QHeaderView.ResizeToContents)
+        
         
         # self.expenses_table.setEditTriggers(
         #     QtWidgets.QAbstractItemView.NoEditTriggers
@@ -42,11 +45,11 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         self.vbox.addWidget(self.label)
         self.vbox.addWidget(self.expenses_table)
         self.setLayout(self.vbox)
-        self.Update()
+        # self.Update()
 
-    def Update(self):        
-        data = expense.get_all()
-        utils.set_data(self.expenses_table, data)
+    # def Update(self):        
+    #     data = expense.get_all()
+    #     utils.set_data(self.expenses_table, data)
 
     
         

@@ -12,7 +12,3 @@ class Expense(db.Entity):
 
 
 
-@db_session
-def get_all():
-    data = Expense.select(lambda e: 1)
-    return [[e.date.strftime("%m/%d/%Y, %H:%M:%S"), str(e.amount), e.category.name, e.comment ] for e in data]

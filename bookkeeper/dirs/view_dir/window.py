@@ -8,7 +8,7 @@ from .add_expense import AddExpenseWidget
 # from . import view_budget
 # from . import view_expense
 # from . import add_expense
-from ..presenter_dir.presenter import presenter
+# from ..presenter_dir.presenter import presenter
 
 class BasicLaypout(QtWidgets.QWidget):
     def __init__(self):
@@ -16,29 +16,39 @@ class BasicLaypout(QtWidgets.QWidget):
         self.initUI()
         
     def closeEvent(self, event: QCloseEvent) -> None:
-        presenter.serialize_budget()
+        # presenter.serialize_budget()
         return super().closeEvent(event)
 
     def initUI(self):
         verticalLayout = QtWidgets.QVBoxLayout(self)
 
-        budget = BudgetTableWidget()
-        expenses = ExpenseTableWidget()
-        add_expense = AddExpenseWidget()
+        self.budget = BudgetTableWidget()
+        self.expenses = ExpenseTableWidget()
+        self.add_expense = AddExpenseWidget()
 
-        verticalLayout.addWidget(budget)
-        verticalLayout.addWidget(expenses)
-        verticalLayout.addWidget(add_expense)
+        verticalLayout.addWidget(self.budget)
+        verticalLayout.addWidget(self.expenses)
+        verticalLayout.addWidget(self.add_expense)
+
     
         self.show()
         
+class Window():
+    def __init__(self):
+        self.app = QtWidgets.QApplication( sys.argv )
+        self.bl = BasicLaypout()
+        
+
+    
+
 
 def start_app():
     print('in strart app')
-    app = QtWidgets.QApplication( sys.argv )
+    
+    # app = QtWidgets.QApplication( sys.argv )
+    # bl = BasicLaypout()
+    # sys.exit( app.exec_() )
 
-    bl = BasicLaypout()
-    sys.exit( app.exec_() )
 
 
 # if __name__ == '__main__':

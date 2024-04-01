@@ -18,6 +18,10 @@ class Model():
         return Category.get_all()
     
     @orm.db_session
+    def get_cat_id_by_name(self, cat_name):
+        return Category.get(name = cat_name).id
+    
+    @orm.db_session
     def calculate_expenses(self):
         now = datetime.datetime.now()
         today = datetime.date.today()   
@@ -33,6 +37,9 @@ class Model():
 
         return daily, weekly, monthly
     
+    @orm.db_session
+    def get_expense_id_by_params(self, e_date, e_amount, e_category, e_comment):
+        return Expense.get(date = e_date, amount = e_amount, category = e_category, comment = e_comment).id
 
     @orm.db_session
     def add_expense(self, _date, _amount, _category, _comment ):
@@ -42,6 +49,11 @@ class Model():
     def delete_expense(self, _id):
         Expense[_id].delete()
 
+    
     @orm.db_session
-    def get_cat_id_by_name(self, cat_name):
-        return Category.get(name = cat_name).id
+    def get_all_expenses(self):
+        data = Expense.select(lambda e: 1)
+        return [[e.date.strftime("%m-%d-%Y %H:%M:%S.%f"), str(e.amount), e.category.name, e.comment ] for e in data]
+        
+        
+    

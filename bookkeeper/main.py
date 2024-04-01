@@ -9,4 +9,6 @@ import dirs.view_dir as view_dir
 
 
 
-view_dir.window.start_app()
+# view_dir.window.start_app()
+from dirs.presenter_dir.presenter import presenter
+
