@@ -63,14 +63,21 @@ class View(QtCore.QObject):
         self.bl.add_expense.add_button.clicked.connect(slot)
     
     def get_added_expense_data(self):
-        date  = datetime.datetime.now()
+        date  = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S.%f")
         # print(self.amount_widget.text())
         amount = int(self.bl.add_expense.amount_widget.text()) #TODO : check datatype
         category_name = self.bl.add_expense.tree.currentItem().text(0)
         comment = self.bl.add_expense.comment_widget.toPlainText()
         return date, amount, category_name, comment
 
-    
+    def get_expense_data_from_table_row(self, row):
+        date = self.bl.expenses.expenses_table.item(row, 0).text()
+        amount = self.bl.expenses.expenses_table.item(row, 1).text()
+        category_name = self.bl.expenses.expenses_table.item(row, 2).text()
+        comment = self.bl.expenses.expenses_table.item(row, 3).text()
+
+        return date, amount, category_name, comment
+
 
     def update_expenses(self, data, slot):
         self.bl.expenses.expenses_table.setRowCount(len(data))
@@ -78,7 +85,8 @@ class View(QtCore.QObject):
 
         for i in range(len(data)):            
             deleteButton = QtWidgets.QPushButton("удалить")
-            self.bl.expenses.expenses_table.setCellWidget(i, 4, deleteButton)
-            deleteButton.clicked.connect(slot)
-            
+            deleteButton.pressed.connect(lambda x = i : slot(x))
 
+            self.bl.expenses.expenses_table.setCellWidget(i, 4, deleteButton)
+            # deleteButton.clicked.connect(slot)
+            

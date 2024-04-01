@@ -18,8 +18,16 @@ class Model():
         return Category.get_all()
     
     @orm.db_session
-    def get_cat_id_by_name(self, cat_name):
+    def get_cat_id_by_name(self, cat_name:str)->int:
         return Category.get(name = cat_name).id
+    
+    @orm.db_session
+    def get_category_name(self, c:Category):
+        return c.name
+    
+    @orm.db_session
+    def get_category_parent(self, c:Category):
+        return c.parent
     
     @orm.db_session
     def calculate_expenses(self):
@@ -55,5 +63,8 @@ class Model():
         data = Expense.select(lambda e: 1)
         return [[e.date.strftime("%m-%d-%Y %H:%M:%S.%f"), str(e.amount), e.category.name, e.comment ] for e in data]
         
-        
+  
+
+
+
     

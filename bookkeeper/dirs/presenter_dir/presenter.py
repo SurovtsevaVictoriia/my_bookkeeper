@@ -85,10 +85,10 @@ class _Presenter():
         categories = self.get_categories()   
         categories_list = []
         for category in categories:
-            categories_list.append([category.name, category.parent])     
+            categories_list.append([self.model.get_category_name(category), 
+                                    self.model.get_category_parent(category)])     
 
-        self.view.update_tree(categories_list)
-    
+        self.view.update_tree(categories_list) 
 
 
     
@@ -104,22 +104,29 @@ class _Presenter():
         self.update_budget()
     
     def expense_data_to_model_data(self, date, amount, category_name, comment):
-        # date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
+        date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
         category = self.model.get_cat_id_by_name(category_name)
-        return date , amount, category, comment
+        return date_new , amount, category, comment
     
 
-    def handle_delete_button_clicked(self):
-        
-        print('handle dlete button clickred')
-        button = self.view.sender()
-        print(button)
 
+    def handle_delete_button_clicked(self, row):
+        print(row)
+        print('handle dlete button clickred')
+        expense_data = self.view.get_expense_data_from_table_row(row)
+        model_data = self.expense_data_to_model_data(*expense_data)
+        print(model_data)
+        id = self.model.get_expense_id_by_params(*model_data)
+        self.model.delete_expense(id)
+        self.update_expenses()
+        self.update_budget()
+   
+
+    
     # has qt
    
     def delete_clicked_expense(self, x):
 
-        button = self.sender()
         button = x
         print(button)
        
@@ -127,7 +134,7 @@ class _Presenter():
             row = self.view.bl.expenses.expenses_table.indexAt(button.pos()).row()
             print(row)
 
-            date = self.view.bl.expenses.expenses_table.item(row, 0).text()
+           
             date = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
             print(date)
             amount = self.view.bl.expenses.expenses_table.item(row, 1).text()
