@@ -16,12 +16,14 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         self.label = QtWidgets.QLabel('Расходы')
 
         self.expenses_table = QtWidgets.QTableWidget(4, 5)
-        self.expenses_table.setColumnCount(5)
+        self.expenses_table.setColumnCount(6)
         self.expenses_table.setRowCount(5)
         self.expenses_table.setHorizontalHeaderLabels(
-            "Дата Сумма Категория Комментарий Удалить".split()
+            "Id Дата Сумма Категория Комментарий Удалить".split()
         )
-       
+        
+        # id table column
+        self.expenses_table.setColumnHidden(0, False)
 
         header = self.expenses_table.horizontalHeader()
         header.setSectionResizeMode(
@@ -34,6 +36,8 @@ class ExpenseTableWidget(QtWidgets.QWidget):
             3, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(
             4, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(
+            5, QtWidgets.QHeaderView.ResizeToContents)
         
         
         # self.expenses_table.setEditTriggers(

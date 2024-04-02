@@ -20,7 +20,6 @@ class BudgetTableWidget(QtWidgets.QWidget):
         )
 
 
-
         self.header = self.budget_table.horizontalHeader()
         self.header.setSectionResizeMode(
             0, QtWidgets.QHeaderView.ResizeToContents)
@@ -34,7 +33,10 @@ class BudgetTableWidget(QtWidgets.QWidget):
         self.vbox = QtWidgets.QVBoxLayout()
         self.vbox.addWidget(self.label)
         self.vbox.addWidget(self.budget_table)
+
+        
         self.setLayout(self.vbox)
+
     
  
 

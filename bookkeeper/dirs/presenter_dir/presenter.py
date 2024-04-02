@@ -41,6 +41,7 @@ class _Presenter():
         self.update_expenses()
         self.view.on_budget_changed(self.handle_on_budget_changed)
         self.view.on_expense_added(self.handle_expense_added)
+        self.view.on_expense_changed(self.handle_expense_changed)
 
 
         sys.exit( self.view.app.exec_())
@@ -97,26 +98,54 @@ class _Presenter():
         self.view.update_expenses(data, self.handle_delete_button_clicked)
 
     def handle_expense_added(self):
-        expense_data = self.view.get_added_expense_data()
-      
+        expense_data = self.view.get_added_expense_data()      
         self.model.add_expense(*self.expense_data_to_model_data(*expense_data))
         self.update_expenses()
         self.update_budget()
     
-    def expense_data_to_model_data(self, date, amount, category_name, comment):
+    #wont get data back because it was changed??
+    #use named parameters??
+    def handle_expense_changed(self, row, col):
+        new_expense_data = self.view.get_expense_data_from_table_row(row)
+        print('whats the problem officer', new_expense_data)
+        new_model_data = self.expense_data_to_model_data(*new_expense_data)
+        self.model.edit_expense(*new_model_data )
+        pass
+
+    def expense_data_to_model_data_with_id(self, id,  date, amount, category_name, comment):
+        print('in coverter with id')
+        id = int(id)
+        amount = int(amount)
+        date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
+        category = self.model.get_cat_id_by_name(category_name)
+        return id, date_new , amount, category, comment
+    
+    def expense_data_to_model_data_without_id(self,  date, amount, category_name, comment):
+        print('in coverter without id')
+        amount = int(amount)
         date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
         category = self.model.get_cat_id_by_name(category_name)
         return date_new , amount, category, comment
+    
+    def expense_data_to_model_data(self, *args):
+        print(args)
+        if len(args) == 4:
+            return self.expense_data_to_model_data_without_id(*args)
+        elif len(args) == 5:
+            return self.expense_data_to_model_data_with_id(*args)
+
+
     
 
 
     def handle_delete_button_clicked(self, row):
         print(row)
         print('handle dlete button clickred')
-        expense_data = self.view.get_expense_data_from_table_row(row)
-        model_data = self.expense_data_to_model_data(*expense_data)
-        print(model_data)
-        id = self.model.get_expense_id_by_params(*model_data)
+        # expense_data = self.view.get_expense_data_from_table_row(row)
+        # model_data = self.expense_data_to_model_data(*expense_data)
+        # print(model_data)
+        # id = self.model.get_expense_id_by_params(*model_data)
+        id = self.view.get_expense_id_from_table_row(row)
         self.model.delete_expense(id)
         self.update_expenses()
         self.update_budget()

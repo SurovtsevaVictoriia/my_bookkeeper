@@ -19,8 +19,8 @@ class BasicLaypout(QtWidgets.QWidget):
     def initUI(self):
         verticalLayout = QtWidgets.QVBoxLayout(self)
 
-        self.budget = BudgetTableWidget()
         self.expenses = ExpenseTableWidget()
+        self.budget = BudgetTableWidget()
         self.add_expense = AddExpenseWidget()
 
         verticalLayout.addWidget(self.budget)
