@@ -68,7 +68,8 @@ class View(QtCore.QObject):
         # print(self.amount_widget.text())
         amount = (self.bl.add_expense.amount_widget.text()) #TODO : check datatype
         category_name = self.bl.add_expense.tree.currentItem().text(0)
-        comment = self.bl.add_expense.comment_widget.toPlainText()
+        # comment = self.bl.add_expense.comment_widget.toPlainText()
+        comment = self.bl.add_expense.comment_widget.text()
         return date, amount, category_name, comment
 
     def get_expense_data_from_table_row(self, row):
@@ -97,3 +98,9 @@ class View(QtCore.QObject):
             self.bl.expenses.expenses_table.setCellWidget(i, 5, deleteButton)
             # deleteButton.clicked.connect(slot)
             
+    def on_redact_category_button_clicked(self, slot):
+        self.bl.add_expense.redact_category_button.clicked.connect(slot)
+    
+    def init_redact_category_dialog(self):
+        print('in init dialog func')
+        self.bl.redact_category_dialog.show()

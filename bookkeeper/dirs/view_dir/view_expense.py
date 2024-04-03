@@ -23,7 +23,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         )
         
         # id table column
-        self.expenses_table.setColumnHidden(0, False)
+        self.expenses_table.setColumnHidden(0, True)
 
         header = self.expenses_table.horizontalHeader()
         header.setSectionResizeMode(

@@ -5,6 +5,7 @@ from PySide6.QtGui import QCloseEvent
 from .view_budget import BudgetTableWidget
 from .view_expense import ExpenseTableWidget
 from .add_expense import AddExpenseWidget
+from .redact_category import RedactCategory
 
 
 class BasicLaypout(QtWidgets.QWidget):
@@ -14,6 +15,7 @@ class BasicLaypout(QtWidgets.QWidget):
         
     def closeEvent(self, event: QCloseEvent) -> None:
         # presenter.serialize_budget()
+        print('did close event work ??')
         return super().closeEvent(event)
 
     def initUI(self):
@@ -23,11 +25,12 @@ class BasicLaypout(QtWidgets.QWidget):
         self.budget = BudgetTableWidget()
         self.add_expense = AddExpenseWidget()
 
+        self.redact_category_dialog = RedactCategory()
+
         verticalLayout.addWidget(self.budget)
         verticalLayout.addWidget(self.expenses)
         verticalLayout.addWidget(self.add_expense)
 
-    
         self.show()
         
 

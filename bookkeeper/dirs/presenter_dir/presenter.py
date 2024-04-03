@@ -42,6 +42,7 @@ class _Presenter():
         self.view.on_budget_changed(self.handle_on_budget_changed)
         self.view.on_expense_added(self.handle_expense_added)
         self.view.on_expense_changed(self.handle_expense_changed)
+        self.view.on_redact_category_button_clicked(self.handle_on_redact_category_button_clicked)
 
 
         sys.exit( self.view.app.exec_())
@@ -134,10 +135,7 @@ class _Presenter():
         elif len(args) == 5:
             return self.expense_data_to_model_data_with_id(*args)
 
-
     
-
-
     def handle_delete_button_clicked(self, row):
         print(row)
         print('handle dlete button clickred')
@@ -178,6 +176,10 @@ class _Presenter():
             self.view.bl.expenses.expenses_table.removeRow(row)
             self.update_expenses()
             self.update_budget()
+
+    def handle_on_redact_category_button_clicked(self):
+        self.view.init_redact_category_dialog()
+        print('redact category button clicked')
 
   
 

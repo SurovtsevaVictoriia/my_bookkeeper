@@ -26,9 +26,11 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.hl2 = QtWidgets.QHBoxLayout()
         self.hl2.addWidget(QtWidgets.QLabel('Категория'))
         self.hl2.addWidget(self.tree)
-        self.hl2.addWidget(QtWidgets.QPushButton('Редактировать'))
+        self.redact_category_button = QtWidgets.QPushButton('Редактировать')
+        self.hl2.addWidget(self.redact_category_button)
 
-        self.comment_widget = QtWidgets.QTextEdit()
+        # self.comment_widget = QtWidgets.QTextEdit()
+        self.comment_widget = QtWidgets.QLineEdit()
         self.hl3 = QtWidgets.QHBoxLayout()
         self.hl3.addWidget(QtWidgets.QLabel('Комментарий'))
         self.hl3.addWidget(self.comment_widget)
