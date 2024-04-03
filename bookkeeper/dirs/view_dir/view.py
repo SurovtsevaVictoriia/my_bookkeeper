@@ -35,11 +35,11 @@ class View(QtCore.QObject):
     
     def get_new_budget(self, row, col):
         if (row, col) == (0, 1):
-            return int(self.bl.budget.budget_table.item(row, col).text())
+            return float(self.bl.budget.budget_table.item(row, col).text())
         elif (row, col) == (1, 1):
-            return int(self.bl.budget.budget_table.item(row, col).text())
+            return float(self.bl.budget.budget_table.item(row, col).text())
         elif (row, col) == (2, 1):
-            return int(self.bl.budget.budget_table.item(row, col).text())
+            return float(self.bl.budget.budget_table.item(row, col).text())
     
     #TODO: suspicious function
     #category: [id, name, parent]
@@ -51,14 +51,17 @@ class View(QtCore.QObject):
             if not category[2]:
                 roots.append(category)
             
-            item = QtWidgets.QTreeWidgetItem(category)
+            # item = QtWidgets.QTreeWidgetItem(category)
+            item = QtWidgets.QTreeWidgetItem([str(category[0]), 
+                                              str(category[1]),
+                                              str(category[2])])
             items.append(item)
        
         # category.parent - 1, так как id в таблицы начинаются с единицы
         for i, category in enumerate(categories_list):
             if category[2]:
                 items[category[2] - 1].addChild(items[i])
-        
+
         self.bl.add_expense.tree.insertTopLevelItems(0, items)
         self.bl.redact_category_dialog.tree.insertTopLevelItems(0, items)
 
@@ -72,17 +75,18 @@ class View(QtCore.QObject):
         category_name = self.bl.add_expense.tree.currentItem().text(1)
         category_id = self.bl.add_expense.tree.currentItem().text(0)
         comment = self.bl.add_expense.comment_widget.text()
-        return date, amount, category_name, comment
+        return date, amount, category_id, category_name, comment
         # return date, amount, category_id, comment
 
     def get_expense_data_from_table_row(self, row):
         id = self.bl.expenses.expenses_table.item(row, 0).text()
         date = self.bl.expenses.expenses_table.item(row, 1).text()
         amount = self.bl.expenses.expenses_table.item(row, 2).text()
-        category_name = self.bl.expenses.expenses_table.item(row, 3).text()
-        comment = self.bl.expenses.expenses_table.item(row, 4).text()
+        category_id = self.bl.expenses.expenses_table.item(row, 3).text()
+        category_name = self.bl.expenses.expenses_table.item(row, 4).text()
+        comment = self.bl.expenses.expenses_table.item(row, 5).text()
 
-        return id, date, amount, category_name, comment
+        return id, date, amount, category_id, category_name, comment
     
     def get_expense_id_from_table_row(self, row):
         id = self.bl.expenses.expenses_table.item(row, 0).text()
@@ -98,7 +102,7 @@ class View(QtCore.QObject):
         for i in range(len(data)):            
             deleteButton = QtWidgets.QPushButton("удалить")
             deleteButton.pressed.connect(lambda x = i : slot(x))
-            self.bl.expenses.expenses_table.setCellWidget(i, 5, deleteButton)
+            self.bl.expenses.expenses_table.setCellWidget(i, 6, deleteButton)
             # deleteButton.clicked.connect(slot)
             
     def on_redact_category_button_clicked(self, slot):

@@ -20,11 +20,6 @@ class Model():
     
     @orm.db_session
     def get_all_categories_as_list(self):
-        # categories = self.get_all_categories()   
-        # categories_list = []
-        # for category in categories:
-        #     categories_list.append(self.get_category_data(category)) 
-        # # return categories_list
         data = Category.select()
         return [[c.id, c.name, c.parent] for c in data]
     
@@ -80,10 +75,13 @@ class Model():
 
     
     @orm.db_session
-    def get_all_expenses_as_list(self):
+    def get_all_expenses_as_list_of_str(self):
         data = Expense.select(lambda e: 1)
-        return [[str(e.id), e.date.strftime("%m-%d-%Y %H:%M:%S.%f"), str(e.amount), e.category.name, e.comment ] for e in data]
-        
+        return [[str(e.id), e.date.strftime("%m-%d-%Y %H:%M:%S.%f"), str(e.amount), str(e.category.id), e.category.name, e.comment ] for e in data]
+    
+    def get_all_expenses_as_list(self):
+        data = Expense.select()
+        return [[e.id, e.date, e.amount, e.category.id, e.catgory.name, e.comment ] for e in Expense]
     @orm.db_session
     def edit_expense(self, id, date, amount, category, comment):
         Expense[id].date = date

@@ -34,7 +34,7 @@ class _Presenter():
 
     
     
-    def run(self):
+    def run(self) -> None:
         print('running')
         self.update_budget()
         self.update_category_tree()
@@ -48,34 +48,35 @@ class _Presenter():
         sys.exit(self.on_exit())
         
         
-    def on_exit(self):
+    def on_exit(self) -> None:
         self.view.app.exec_()
         self.serialize_budget()
 
 
 
 
-    def add_default_categories(self):
+    def add_default_categories(self) -> None:
         self.model.add_category('Еда' )
         self.model.add_category('Одежда')
         self.model.add_category('Мебель')
         self.model.add_category('Прочее')
 
     
-    def add_category(self, c_name, c_parent):
-        self.model.add_category(c_name, c_parent)
+    def add_category(self, c_name:str, c_parent_id:int) -> None:
+        self.model.add_category(c_name, c_parent_id)
 
     # TODO
-    def get_added_category_data(self):
+    def get_added_category_data(self) -> tuple[str, int]:
         new_name = ''
         new_parent = 1
         return new_name, new_parent
     
     
-    def calculate_expenses(self):
+    
+    def calculate_expenses(self) -> tuple[float, float, float]:
         return self.model.calculate_expenses()
     
-    def serialize_budget(self):
+    def serialize_budget(self) -> None:
         print('budget serialized')
         with open('bookkeeper/dirs/presenter_dir/budget.json', 'w') as f:
             data = {'daily': self.daily_budget, 
@@ -83,13 +84,11 @@ class _Presenter():
                     'monthly': self.monthly_budget}
             json.dump(data, f)    
 
-    # has qt DONE
-    def update_budget(self): 
+    def update_budget(self) -> None: 
         daily, weekly, monthly = self.calculate_expenses()
         self.view.update_budget(daily, weekly, monthly, self.daily_budget, self.weekly_budget, self.monthly_budget)
 
-    # has qt  DONE
-    def handle_on_budget_changed(self, row, col):
+    def handle_on_budget_changed(self, row:int, col:int) -> None:
         if (row, col) == (0, 1):
             self.daily_budget = self.view.get_new_budget(row, col)
         elif (row, col) == (1, 1):
@@ -97,103 +96,75 @@ class _Presenter():
         elif (row, col) == (2, 1):
             self.monthly_budget = self.view.get_new_budget(row, col)
         
-
-    def get_all_categories(self):
-        categories = self.model.get_all_categories()
-        return categories
     
-    # has qt DONE
-    def update_category_tree(self):
+    def update_category_tree(self) -> None:
         print('in update tree')
         categories_list = self.model.get_all_categories_as_list()
         self.view.update_category_tree(categories_list) 
     
-    def update_expenses(self):
-        data = self.model.get_all_expenses_as_list()
+    def update_expenses(self) -> None:
+        data = self.model.get_all_expenses_as_list_of_str()
         self.view.update_expenses(data, self.handle_delete_button_clicked)
 
-    def handle_on_expense_added(self):
+    def handle_on_expense_added(self) -> None:
         expense_data = self.view.get_added_expense_data()      
         self.model.add_expense(*self.expense_data_to_model_data(*expense_data))
         self.update_expenses()
-        self.update_budget()
-    
+        self.update_budget()    
 
-    def handle_on_expense_changed(self, row, col):
+    def handle_on_expense_changed(self, row:int, col:int) -> None:
         new_expense_data = self.view.get_expense_data_from_table_row(row)
-        print('whats the problem officer', new_expense_data)
+        print('new expense data', new_expense_data)
         new_model_data = self.expense_data_to_model_data(*new_expense_data)
+        print('new model data', new_model_data)
         self.model.edit_expense(*new_model_data )
         self.update_budget()
         pass
 
-    def expense_data_to_model_data_with_id(self, id,  date, amount, category_name, comment):
+    def expense_data_to_model_data_with_id(self, id:int,  date:str, amount:float, category_id:int, category_name:str, comment:str)\
+                                            -> tuple[int, datetime:datetime, float, int, str]:
         print('in coverter with id')
         id = int(id)
-        amount = int(amount)
+        amount = float(amount)
         date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
-        category = self.model.get_cat_id_by_name(category_name)
-        return id, date_new , amount, category, comment
+        category_id = int(category_id)
+        # category = self.model.get_cat_id_by_name(category_name)
+        return id, date_new , amount, category_id,  comment
     
-    def expense_data_to_model_data_without_id(self,  date, amount, category_name, comment):
+    def expense_data_to_model_data_without_id(self,   date:str, amount:float, category_id:int, category_name:str, comment:str)\
+                                            -> tuple[datetime:datetime, float, int, str] :
         print('in coverter without id')
-        amount = int(amount)
+        amount = float(amount)
         date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
-        category = self.model.get_cat_id_by_name(category_name)
-        return date_new , amount, category, comment
+        category_id = int(category_id)
+        # category = self.model.get_cat_id_by_name(category_name)
+        return date_new , amount, category_id, comment
     
-    def expense_data_to_model_data(self, *args):
+    def expense_data_to_model_data(self, *args) -> None:
         print(args)
-        if len(args) == 4:
+        if len(args) == 5:
             return self.expense_data_to_model_data_without_id(*args)
-        elif len(args) == 5:
+        elif len(args) == 6:
             return self.expense_data_to_model_data_with_id(*args)
 
     
-    def handle_delete_button_clicked(self, row):
+    def handle_delete_button_clicked(self, row:int) -> None:
         print(row)
         print('handle dlete button clickred')
         id = self.view.get_expense_id_from_table_row(row)
         self.model.delete_expense(id)
         self.update_expenses()
-        self.update_budget()
+        self.update_budget()   
    
 
-    
-    # has qt
-   
-    def delete_clicked_expense(self, x):
-
-        button = x
-        print(button)
-       
-        if button:
-            row = self.view.bl.expenses.expenses_table.indexAt(button.pos()).row()
-            print(row)
-
-           
-            date = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
-            print(date)
-            amount = self.view.bl.expenses.expenses_table.item(row, 1).text()
-            category = self.view.bl.expenses.expenses_table.item(row, 2).text()
-            category = self.model.get_cat_id_by_name(category)
-            comment = self.view.bl.expenses.expenses_table.item(row, 3).text()
-
-            id = self.model.get_expense_id_by_params(date, amount, category, comment)
-            self.model.delete_expense(id)
-
-            self.view.bl.expenses.expenses_table.removeRow(row)
-            self.update_expenses()
-            self.update_budget()
-
-    def handle_on_redact_category_button_clicked(self):
+    def handle_on_redact_category_button_clicked(self) -> None:
         self.view.init_redact_category_dialog()
         print('redact category button clicked')
 
-    def handle_on_delete_category_button_clicked(self):
+    def handle_on_delete_category_button_clicked(self) -> None:
         print('delete_category_button_clicked')
 
-    def handle_on_add_new_catgory_button_clicked(self):
+    def handle_on_add_new_catgory_button_clicked(self) -> None:
         print('add_new_catgory_button_clicked')
   
 
