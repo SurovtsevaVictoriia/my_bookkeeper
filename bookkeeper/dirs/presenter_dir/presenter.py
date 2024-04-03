@@ -44,7 +44,7 @@ class _Presenter():
         self.view.on_expense_changed(self.handle_on_expense_changed)
         self.view.on_redact_category_button_clicked(self.handle_on_redact_category_button_clicked)
         self.view.on_delete_category_button_clicked(self.handle_on_delete_category_button_clicked)
-        self.view.on_add_new_catgory_button_clicked(self.handle_on_add_new_catgory_button_clicked)
+        self.view.on_add_new_catgory_button_clicked(self.handle_on_add_new_category_button_clicked)
         sys.exit(self.on_exit())
         
         
@@ -100,7 +100,9 @@ class _Presenter():
     def update_category_tree(self) -> None:
         print('in update tree')
         categories_list = self.model.get_all_categories_as_list()
-        self.view.update_category_tree(categories_list) 
+        self.view.update_main_window_tree(categories_list)
+        self.view.update_dialog_window_tree(categories_list)
+        # self.view.update_category_tree_f(categories_list) 
     
     def update_expenses(self) -> None:
         data = self.model.get_all_expenses_as_list_of_str()
@@ -164,8 +166,17 @@ class _Presenter():
     def handle_on_delete_category_button_clicked(self) -> None:
         print('delete_category_button_clicked')
 
-    def handle_on_add_new_catgory_button_clicked(self) -> None:
+    def handle_on_add_new_category_button_clicked(self) -> None:
         print('add_new_catgory_button_clicked')
+        name, parent_id = self.view.get_added_category_data()
+        # Check database or current widget data?
+        # Does it defeat the purpose of having a database?
+        
+        category = self.model.add_category(name, parent_id)    
+        # self.view.add_new_category_child_f(name, parent_id)
+        self.view.add_new_category_child_main_window(category)
+        self.view.add_new_category_child_dialog_window(category)
+        print(name, parent_id)
   
 
 

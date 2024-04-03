@@ -27,23 +27,21 @@ class Model():
     def get_cat_id_by_name(self, cat_name:str)->int:
         return Category.get(name = cat_name).id
     
-    @orm.db_session
-    def get_category_name(self, c:Category):
-        return c.name
-    
-    @orm.db_session
-    def get_category_parent(self, c:Category):
-        return c.parent
-    
-    def get_category_id(self, c:Category):
-        return c.id
+
     
     def get_category_data(self, c:Category):
         return [c.id, c.name, c.parent]
     
     @orm.db_session
     def add_category(self, c_name, c_parent):
-        Category(name = c_name, parent = c_parent)
+        c = Category(name = c_name, parent = c_parent)
+        id = self.get_latest_category_id()
+        print('trying to return id', c_name,  id)
+        return [id, c_name, c_parent]
+
+    def get_latest_category_id(self):
+        id = orm.max(c.id for c in Category)
+        return id
 
     @orm.db_session
     def calculate_expenses(self):

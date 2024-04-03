@@ -1,4 +1,5 @@
 from .basic_layout import BasicLaypout 
+from .redact_category import RedactCategoryDialog
 import sys
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Qt
@@ -28,7 +29,7 @@ class View(QtCore.QObject):
                                            [str(monthly), str(monthly_budget)]])
         for i in range(self.bl.budget.budget_table.rowCount()): #make sum uneditable
             item = self.bl.budget.budget_table.item(i, 0)
-            item.setFlags(Qt.NoItemFlags)   \
+            item.setFlags(Qt.NoItemFlags)  
     
     def on_budget_changed(self, slot):
         self.bl.budget.budget_table.cellChanged.connect(slot)
@@ -43,7 +44,7 @@ class View(QtCore.QObject):
     
     #TODO: suspicious function
     #category: [id, name, parent]
-    def update_category_tree(self, categories_list):    
+    def update_category_tree_f(self, tree:QtWidgets.QTreeWidget, categories_list):    
         items = []
         roots = []
         for category in categories_list:
@@ -62,8 +63,13 @@ class View(QtCore.QObject):
             if category[2]:
                 items[category[2] - 1].addChild(items[i])
 
-        self.bl.add_expense.tree.insertTopLevelItems(0, items)
-        self.bl.redact_category_dialog.tree.insertTopLevelItems(0, items)
+        tree.insertTopLevelItems(0, items)
+        
+    def update_main_window_tree(self, categories_list):
+        self.update_category_tree_f(self.bl.add_expense.tree, categories_list)
+
+    def update_dialog_window_tree(self, categories_list):
+        self.update_category_tree_f(self.bl.redact_category_dialog.tree, categories_list)
 
 
     def on_expense_added(self, slot):
@@ -71,9 +77,9 @@ class View(QtCore.QObject):
     
     def get_added_expense_data(self):
         date  = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S.%f")
-        amount = (self.bl.add_expense.amount_widget.text()) #TODO : check datatype
+        amount = float((self.bl.add_expense.amount_widget.text())) #TODO : check datatype
         category_name = self.bl.add_expense.tree.currentItem().text(1)
-        category_id = self.bl.add_expense.tree.currentItem().text(0)
+        category_id = int(self.bl.add_expense.tree.currentItem().text(0))
         comment = self.bl.add_expense.comment_widget.text()
         return date, amount, category_id, category_name, comment
         # return date, amount, category_id, comment
@@ -103,19 +109,42 @@ class View(QtCore.QObject):
             deleteButton = QtWidgets.QPushButton("удалить")
             deleteButton.pressed.connect(lambda x = i : slot(x))
             self.bl.expenses.expenses_table.setCellWidget(i, 6, deleteButton)
-            # deleteButton.clicked.connect(slot)
+            
             
     def on_redact_category_button_clicked(self, slot):
         self.bl.add_expense.redact_category_button.clicked.connect(slot)
     
     def init_redact_category_dialog(self):
+       
         print('in init dialog func')
-        self.bl.redact_category_dialog.show()
-        
-
+        # self.bl.redact_category_dialog.setModal(True)
+        # self.bl.redact_category_dialog.show()
+        self.bl.redact_category_dialog.exec()
 
     def on_delete_category_button_clicked(self, slot):
         self.bl.redact_category_dialog.delete_cat_button.clicked.connect(slot)
 
     def on_add_new_catgory_button_clicked(self, slot):
         self.bl.redact_category_dialog.add_new_cat_button.clicked.connect(slot)
+
+    #TODO :check that name is not empty
+    # Maybe check that name is not repeated among children or not
+    def get_added_category_data(self):
+        name = self.bl.redact_category_dialog.new_name_widget.text()
+        parent_id = int(self.bl.redact_category_dialog.tree.currentItem().text(0))
+        return name, parent_id
+    
+    def add_new_category_child_f(self, tree:QtWidgets.QTreeWidget, category):
+        item = QtWidgets.QTreeWidgetItem([str(category[0]), 
+                                          str(category[1]),
+                                          str(category[2])])
+        print('searching for item', category)
+        parent_item =  tree.findItems(str(category[0]),\
+                                      flags = QtCore.Qt.MatchFlag.MatchExactly,  column = 0)[0]
+        parent_item.addChild(item)
+
+    def add_new_category_child_main_window(self, category):
+        self.add_new_category_child_f(self.bl.add_expense.tree, category)
+        
+    def add_new_category_child_dialog_window(self, category):
+        self.add_new_category_child_f(self.bl.redact_category_dialog.tree, category)
