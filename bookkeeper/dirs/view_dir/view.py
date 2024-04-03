@@ -104,3 +104,9 @@ class View(QtCore.QObject):
     def init_redact_category_dialog(self):
         print('in init dialog func')
         self.bl.redact_category_dialog.show()
+
+    def on_delete_category_button_clicked(self, slot):
+        self.bl.redact_category_dialog.delete_cat_button.clicked.connect(slot)
+
+    def on_add_new_catgory_button_clicked(self, slot):
+        self.bl.redact_category_dialog.add_new_cat_button.clicked.connect(slot)

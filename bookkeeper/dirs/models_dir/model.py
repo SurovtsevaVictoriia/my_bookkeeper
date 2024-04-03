@@ -14,7 +14,8 @@ class Model():
     def __init__(self):
         pass
 
-    def get_categories(self):
+    @orm.db_session
+    def get_all_categories(self):
         return Category.get_all()
     
     @orm.db_session
@@ -29,6 +30,10 @@ class Model():
     def get_category_parent(self, c:Category):
         return c.parent
     
+    @orm.db_session
+    def add_category(self, c_name, c_parent):
+        Category(name = c_name, parent = c_parent)
+
     @orm.db_session
     def calculate_expenses(self):
         now = datetime.datetime.now()

@@ -1,12 +1,14 @@
 import sys
 import datetime
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt 
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QCloseEvent 
 
 class RedactCategory(QtWidgets.QDialog):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.label = QtWidgets.QLabel('Что - то с категориями')
+        self.label = QtWidgets.QLabel('Выберите категорию')
         self.vbox = QtWidgets.QVBoxLayout()
         
         self.tree = QtWidgets.QTreeWidget()
@@ -20,11 +22,11 @@ class RedactCategory(QtWidgets.QDialog):
         self.add_vl = QtWidgets.QVBoxLayout()
         self.add_label = QtWidgets.QLabel('Добавить новую категорию')
         self.new_name_widget = QtWidgets.QLineEdit()
-        self.add_new_cat_widget = QtWidgets.QPushButton('Добавить')
+        self.add_new_cat_button = QtWidgets.QPushButton('Добавить')
 
         self.add_vl.addWidget(self.add_label)
         self.add_vl.addWidget(self.new_name_widget)
-        self.add_vl.addWidget(self.add_new_cat_widget)
+        self.add_vl.addWidget(self.add_new_cat_button)
 
         self.delete_vl = QtWidgets.QVBoxLayout()
         self.delete_label =  QtWidgets.QLabel('Удалить категорию')
@@ -41,4 +43,9 @@ class RedactCategory(QtWidgets.QDialog):
         self.vbox.addLayout(self.bottom_hl)
 
         self.setLayout(self.vbox)
+    
+    def closeEvent(self, arg__1: QCloseEvent) -> None:
+        self.new_name_widget.setText('')
+        print('dialog window cleared')
+        return super().closeEvent(arg__1)
 
