@@ -65,6 +65,7 @@ class _Presenter():
     def add_category(self, c_name, c_parent):
         self.model.add_category(c_name, c_parent)
 
+    # TODO
     def get_added_category_data(self):
         new_name = ''
         new_parent = 1
@@ -89,14 +90,13 @@ class _Presenter():
 
     # has qt  DONE
     def handle_on_budget_changed(self, row, col):
-        # print('changed something', row, col)
         if (row, col) == (0, 1):
             self.daily_budget = self.view.get_new_budget(row, col)
         elif (row, col) == (1, 1):
             self.weekly_budget = self.view.get_new_budget(row, col)
         elif (row, col) == (2, 1):
             self.monthly_budget = self.view.get_new_budget(row, col)
-        # self.serialize_budget()#TODO: make it on window closed
+        
 
     def get_all_categories(self):
         categories = self.model.get_all_categories()
@@ -105,21 +105,11 @@ class _Presenter():
     # has qt DONE
     def update_category_tree(self):
         print('in update tree')
-        # categories = self.get_all_categories()   
-        # categories_list = []
-        # for category in categories:
-        #     categories_list.append(self.model.get_category_data(category))     
-        #     # categories_list.append([
-        #     #                         self.model.get_category_name(category), 
-        #     #                         self.model.get_category_parent(category)])     
-        
         categories_list = self.model.get_all_categories_as_list()
         self.view.update_category_tree(categories_list) 
-
-
     
     def update_expenses(self):
-        data = self.model.get_all_expenses()
+        data = self.model.get_all_expenses_as_list()
         self.view.update_expenses(data, self.handle_delete_button_clicked)
 
     def handle_on_expense_added(self):
@@ -128,8 +118,7 @@ class _Presenter():
         self.update_expenses()
         self.update_budget()
     
-    #wont get data back because it was changed??
-    #use named parameters??
+
     def handle_on_expense_changed(self, row, col):
         new_expense_data = self.view.get_expense_data_from_table_row(row)
         print('whats the problem officer', new_expense_data)
@@ -164,10 +153,6 @@ class _Presenter():
     def handle_delete_button_clicked(self, row):
         print(row)
         print('handle dlete button clickred')
-        # expense_data = self.view.get_expense_data_from_table_row(row)
-        # model_data = self.expense_data_to_model_data(*expense_data)
-        # print(model_data)
-        # id = self.model.get_expense_id_by_params(*model_data)
         id = self.view.get_expense_id_from_table_row(row)
         self.model.delete_expense(id)
         self.update_expenses()

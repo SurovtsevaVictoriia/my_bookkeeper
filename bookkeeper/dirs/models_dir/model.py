@@ -20,11 +20,13 @@ class Model():
     
     @orm.db_session
     def get_all_categories_as_list(self):
-        categories = self.get_all_categories()   
-        categories_list = []
-        for category in categories:
-            categories_list.append(self.get_category_data(category)) 
-        return categories_list
+        # categories = self.get_all_categories()   
+        # categories_list = []
+        # for category in categories:
+        #     categories_list.append(self.get_category_data(category)) 
+        # # return categories_list
+        data = Category.select()
+        return [[c.id, c.name, c.parent] for c in data]
     
     @orm.db_session
     def get_cat_id_by_name(self, cat_name:str)->int:
@@ -78,7 +80,7 @@ class Model():
 
     
     @orm.db_session
-    def get_all_expenses(self):
+    def get_all_expenses_as_list(self):
         data = Expense.select(lambda e: 1)
         return [[str(e.id), e.date.strftime("%m-%d-%Y %H:%M:%S.%f"), str(e.amount), e.category.name, e.comment ] for e in data]
         

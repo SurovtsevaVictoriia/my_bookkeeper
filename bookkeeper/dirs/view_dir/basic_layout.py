@@ -5,7 +5,7 @@ from PySide6.QtGui import QCloseEvent
 from .view_budget import BudgetTableWidget
 from .view_expense import ExpenseTableWidget
 from .add_expense import AddExpenseWidget
-from .redact_category import RedactCategory
+from .redact_category import RedactCategoryDialog
 
 
 class BasicLaypout(QtWidgets.QWidget):
@@ -25,7 +25,7 @@ class BasicLaypout(QtWidgets.QWidget):
         self.budget = BudgetTableWidget()
         self.add_expense = AddExpenseWidget()
 
-        self.redact_category_dialog = RedactCategory()
+        self.redact_category_dialog = RedactCategoryDialog()
 
         verticalLayout.addWidget(self.budget)
         verticalLayout.addWidget(self.expenses)

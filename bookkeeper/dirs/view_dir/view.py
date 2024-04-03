@@ -42,7 +42,7 @@ class View(QtCore.QObject):
             return int(self.bl.budget.budget_table.item(row, col).text())
     
     #TODO: suspicious function
-    #category: [id, name, data]
+    #category: [id, name, parent]
     def update_category_tree(self, categories_list):    
         items = []
         roots = []
@@ -58,7 +58,7 @@ class View(QtCore.QObject):
         for i, category in enumerate(categories_list):
             if category[2]:
                 items[category[2] - 1].addChild(items[i])
-
+        
         self.bl.add_expense.tree.insertTopLevelItems(0, items)
         self.bl.redact_category_dialog.tree.insertTopLevelItems(0, items)
 

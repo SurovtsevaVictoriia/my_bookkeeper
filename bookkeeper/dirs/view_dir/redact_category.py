@@ -4,7 +4,7 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent 
 
-class RedactCategory(QtWidgets.QDialog):
+class RedactCategoryDialog(QtWidgets.QDialog):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
