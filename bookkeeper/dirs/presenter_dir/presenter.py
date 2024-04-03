@@ -45,14 +45,22 @@ class _Presenter():
         self.view.on_redact_category_button_clicked(self.handle_on_redact_category_button_clicked)
         self.view.on_delete_category_button_clicked(self.handle_on_delete_category_button_clicked)
         self.view.on_add_new_catgory_button_clicked(self.handle_on_add_new_catgory_button_clicked)
-        sys.exit( self.view.app.exec_())
-        self.serialize_budget()
+        sys.exit(self.on_exit())
         
+        
+    def on_exit(self):
+        self.view.app.exec_()
+        self.serialize_budget()
+
+
+
 
     def add_default_categories(self):
-        self.model.add_category('Всё')
-        self.model.add_category()
-        self.model.add_category()
+        self.model.add_category('Еда' )
+        self.model.add_category('Одежда')
+        self.model.add_category('Мебель')
+        self.model.add_category('Прочее')
+
     
     def add_category(self, c_name, c_parent):
         self.model.add_category(c_name, c_parent)
@@ -88,7 +96,7 @@ class _Presenter():
             self.weekly_budget = self.view.get_new_budget(row, col)
         elif (row, col) == (2, 1):
             self.monthly_budget = self.view.get_new_budget(row, col)
-        self.serialize_budget()#TODO: make it on window closed
+        # self.serialize_budget()#TODO: make it on window closed
 
     def get_all_categories(self):
         categories = self.model.get_all_categories()
@@ -97,13 +105,16 @@ class _Presenter():
     # has qt DONE
     def update_category_tree(self):
         print('in update tree')
-        categories = self.get_all_categories()   
-        categories_list = []
-        for category in categories:
-            categories_list.append([self.model.get_category_name(category), 
-                                    self.model.get_category_parent(category)])     
-
-        self.view.update_tree(categories_list) 
+        # categories = self.get_all_categories()   
+        # categories_list = []
+        # for category in categories:
+        #     categories_list.append(self.model.get_category_data(category))     
+        #     # categories_list.append([
+        #     #                         self.model.get_category_name(category), 
+        #     #                         self.model.get_category_parent(category)])     
+        
+        categories_list = self.model.get_all_categories_as_list()
+        self.view.update_category_tree(categories_list) 
 
 
     
@@ -124,6 +135,7 @@ class _Presenter():
         print('whats the problem officer', new_expense_data)
         new_model_data = self.expense_data_to_model_data(*new_expense_data)
         self.model.edit_expense(*new_model_data )
+        self.update_budget()
         pass
 
     def expense_data_to_model_data_with_id(self, id,  date, amount, category_name, comment):
@@ -180,7 +192,6 @@ class _Presenter():
             amount = self.view.bl.expenses.expenses_table.item(row, 1).text()
             category = self.view.bl.expenses.expenses_table.item(row, 2).text()
             category = self.model.get_cat_id_by_name(category)
-
             comment = self.view.bl.expenses.expenses_table.item(row, 3).text()
 
             id = self.model.get_expense_id_by_params(date, amount, category, comment)

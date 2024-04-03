@@ -19,6 +19,14 @@ class Model():
         return Category.get_all()
     
     @orm.db_session
+    def get_all_categories_as_list(self):
+        categories = self.get_all_categories()   
+        categories_list = []
+        for category in categories:
+            categories_list.append(self.get_category_data(category)) 
+        return categories_list
+    
+    @orm.db_session
     def get_cat_id_by_name(self, cat_name:str)->int:
         return Category.get(name = cat_name).id
     
@@ -29,6 +37,12 @@ class Model():
     @orm.db_session
     def get_category_parent(self, c:Category):
         return c.parent
+    
+    def get_category_id(self, c:Category):
+        return c.id
+    
+    def get_category_data(self, c:Category):
+        return [c.id, c.name, c.parent]
     
     @orm.db_session
     def add_category(self, c_name, c_parent):

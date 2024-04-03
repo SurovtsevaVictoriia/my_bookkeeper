@@ -41,36 +41,39 @@ class View(QtCore.QObject):
         elif (row, col) == (2, 1):
             return int(self.bl.budget.budget_table.item(row, col).text())
     
-    def update_tree(self, categories_list):    
+    #TODO: suspicious function
+    #category: [id, name, data]
+    def update_category_tree(self, categories_list):    
         items = []
         roots = []
         for category in categories_list:
-            if not category[1]:
+            print(category)
+            if not category[2]:
                 roots.append(category)
             
-            item = QtWidgets.QTreeWidgetItem([category[0]])
+            item = QtWidgets.QTreeWidgetItem(category)
             items.append(item)
        
         # category.parent - 1, так как id в таблицы начинаются с единицы
         for i, category in enumerate(categories_list):
-            if category[1]:
-                items[category[1] - 1].addChild(items[i])
+            if category[2]:
+                items[category[2] - 1].addChild(items[i])
 
         self.bl.add_expense.tree.insertTopLevelItems(0, items)
+        self.bl.redact_category_dialog.tree.insertTopLevelItems(0, items)
 
 
     def on_expense_added(self, slot):
         self.bl.add_expense.add_button.clicked.connect(slot)
     
     def get_added_expense_data(self):
-
         date  = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S.%f")
-        # print(self.amount_widget.text())
         amount = (self.bl.add_expense.amount_widget.text()) #TODO : check datatype
-        category_name = self.bl.add_expense.tree.currentItem().text(0)
-        # comment = self.bl.add_expense.comment_widget.toPlainText()
+        category_name = self.bl.add_expense.tree.currentItem().text(1)
+        category_id = self.bl.add_expense.tree.currentItem().text(0)
         comment = self.bl.add_expense.comment_widget.text()
         return date, amount, category_name, comment
+        # return date, amount, category_id, comment
 
     def get_expense_data_from_table_row(self, row):
         id = self.bl.expenses.expenses_table.item(row, 0).text()
@@ -104,6 +107,8 @@ class View(QtCore.QObject):
     def init_redact_category_dialog(self):
         print('in init dialog func')
         self.bl.redact_category_dialog.show()
+        
+
 
     def on_delete_category_button_clicked(self, slot):
         self.bl.redact_category_dialog.delete_cat_button.clicked.connect(slot)

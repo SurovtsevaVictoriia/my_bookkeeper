@@ -20,8 +20,10 @@ class AddExpenseWidget(QtWidgets.QWidget):
 
 
         self.tree = QtWidgets.QTreeWidget()
-        self.tree.setColumnCount(1)
-        self.tree.setHeaderLabels(["Тип"])
+        self.tree.setColumnCount(3)
+        self.tree.setHeaderLabels("- Категория Родитель".split())
+        self.tree.setColumnHidden(0, False)
+        self.tree.setColumnHidden(2, True)
 
         self.hl2 = QtWidgets.QHBoxLayout()
         self.hl2.addWidget(QtWidgets.QLabel('Категория'))

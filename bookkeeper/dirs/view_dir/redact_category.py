@@ -12,8 +12,10 @@ class RedactCategory(QtWidgets.QDialog):
         self.vbox = QtWidgets.QVBoxLayout()
         
         self.tree = QtWidgets.QTreeWidget()
-        self.tree.setColumnCount(1)
-        self.tree.setHeaderLabels(["Тип"])
+        self.tree.setColumnCount(3)
+        self.tree.setHeaderLabels("- Категория Родитель".split())
+        self.tree.setColumnHidden(0, False)
+        self.tree.setColumnHidden(2, True)
         # выбираем родителя, а потом выбираем что делать:
         # либо добавить ребенка, либо удалить
 
