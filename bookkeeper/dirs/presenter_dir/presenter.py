@@ -87,6 +87,7 @@ class _Presenter():
     def update_budget(self) -> None: 
         daily, weekly, monthly = self.calculate_expenses()
         self.view.update_budget(daily, weekly, monthly, self.daily_budget, self.weekly_budget, self.monthly_budget)
+        print('budget updated')
 
     def handle_on_budget_changed(self, row:int, col:int) -> None:
         if (row, col) == (0, 1):
@@ -101,7 +102,9 @@ class _Presenter():
         print('in update tree')
         categories_list = self.model.get_all_categories_as_list()
         self.view.update_main_window_tree(categories_list)
+        print('main tree updated')
         self.view.update_dialog_window_tree(categories_list)
+
         # self.view.update_category_tree_f(categories_list) 
     
     def update_expenses(self) -> None:
@@ -165,13 +168,15 @@ class _Presenter():
 
     def handle_on_delete_category_button_clicked(self) -> None:
         print('delete_category_button_clicked')
+        id = self.view.get_selected_in_redacter_category_id()
+        self.model.delete_category(id)
 
     def handle_on_add_new_category_button_clicked(self) -> None:
         print('add_new_catgory_button_clicked')
         name, parent_id = self.view.get_added_category_data()
         # Check database or current widget data?
         # Does it defeat the purpose of having a database?
-        
+        print(name, parent_id)
         category = self.model.add_category(name, parent_id)    
         # self.view.add_new_category_child_f(name, parent_id)
         self.view.add_new_category_child_main_window(category)

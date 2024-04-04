@@ -1,6 +1,6 @@
 from pony.orm import *
 from dirs.models_dir import model
-from dirs.models_dir import db, Category, Budget, Expense
+from dirs.models_dir import db, Category, Expense
 # from dirs.models_dir import budget, category, expense
 # from dirs.models_dir import *
 # from dirs.models_dir.expense import Expense
@@ -31,13 +31,10 @@ with db_session:
     c2 = Category(name = 'Meats', parent = c1.id)
     e2 = Expense(amount = 5, category = c2, comment = 'beef' )
 
+# print(c2.expenses)
 
-
-with db_session:
-    b1 = Budget( name = 'Daily', current = 0 , budg = 100)
-    b2 = Budget( name = 'Weekly', current = 0 , budg = 1000)
-    b3 = Budget( name = 'Monthly', current = 0 , budg = 10000)
 
 # tester.recalculate_budget()
+
 
 # db.drop_all_tables(with_all_data = True)

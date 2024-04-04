@@ -148,3 +148,10 @@ class View(QtCore.QObject):
         
     def add_new_category_child_dialog_window(self, category):
         self.add_new_category_child_f(self.bl.redact_category_dialog.tree, category)
+
+    def get_selected_in_redacter_category_id(self):
+        id = int(self.bl.redact_category_dialog.tree.currentItem().text(0))
+        return id
+
+    def delete_category_f(self, tree, category):
+        pass

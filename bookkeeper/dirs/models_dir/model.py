@@ -14,23 +14,12 @@ class Model():
     def __init__(self):
         pass
 
-    @orm.db_session
-    def get_all_categories(self):
-        return Category.get_all()
     
     @orm.db_session
     def get_all_categories_as_list(self):
         data = Category.select()
         return [[c.id, c.name, c.parent] for c in data]
     
-    @orm.db_session
-    def get_cat_id_by_name(self, cat_name:str)->int:
-        return Category.get(name = cat_name).id
-    
-
-    
-    def get_category_data(self, c:Category):
-        return [c.id, c.name, c.parent]
     
     @orm.db_session
     def add_category(self, c_name, c_parent):
@@ -39,6 +28,24 @@ class Model():
         print('trying to return id', c_name,  id)
         return [id, c_name, c_parent]
 
+    @orm.db_session
+    def delete_category(self, id):
+        """move all children up in the hierarchy
+        """
+        # move all children up in the hierarchy
+        parent_id = Category[id].parent
+        children = Category.select(lambda c: c.parent == id)
+        #stupid way to do it, there is a relation for a reason but whatever
+        expenses = Expense.slect(lambda e: e.category == Category[id])
+        for expense in expenses:
+            expense.category
+        for child in children:
+            child.parent = parent_id                  
+        Category[id].delete()
+
+
+    
+    @orm.db_session
     def get_latest_category_id(self):
         id = orm.max(c.id for c in Category)
         return id
@@ -70,7 +77,6 @@ class Model():
     @orm.db_session
     def delete_expense(self, _id):
         Expense[_id].delete()
-
     
     @orm.db_session
     def get_all_expenses_as_list_of_str(self):
@@ -80,6 +86,7 @@ class Model():
     def get_all_expenses_as_list(self):
         data = Expense.select()
         return [[e.id, e.date, e.amount, e.category.id, e.catgory.name, e.comment ] for e in Expense]
+    
     @orm.db_session
     def edit_expense(self, id, date, amount, category, comment):
         Expense[id].date = date
