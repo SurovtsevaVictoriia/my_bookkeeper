@@ -12,7 +12,8 @@ db.generate_mapping(create_tables=True)
 
 class Model():
     def __init__(self):
-        pass
+        self.budget_filename = 'bookkeeper/dirs/presenter_dir/budget.json'        pass
+
 
     
     @orm.db_session
@@ -36,9 +37,9 @@ class Model():
         parent_id = Category[id].parent
         children = Category.select(lambda c: c.parent == id)
         #stupid way to do it, there is a relation for a reason but whatever
-        expenses = Expense.slect(lambda e: e.category == Category[id])
+        expenses = Expense.select(lambda e: e.category == Category[id])
         for expense in expenses:
-            expense.category
+            expense.category = Category[parent_id]
         for child in children:
             child.parent = parent_id                  
         Category[id].delete()

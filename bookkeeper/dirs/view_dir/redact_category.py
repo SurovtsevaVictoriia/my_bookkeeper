@@ -1,8 +1,9 @@
 import sys
 import datetime
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent 
+
+from . import utils
 
 class RedactCategoryDialog(QtWidgets.QDialog):
 
@@ -51,3 +52,23 @@ class RedactCategoryDialog(QtWidgets.QDialog):
         print('dialog window cleared')
         return super().closeEvent(arg__1)
 
+    def update_tree(self, categories_list):
+        utils.update_category_tree_f(self.tree, categories_list)
+
+    def on_delete_category_button_clicked(self, slot):
+        self.delete_cat_button.clicked.connect(slot)
+    
+    def on_add_new_catgory_button_clicked(self, slot):
+        self.add_new_cat_button.clicked.connect(slot)
+
+    def get_added_category_data(self):
+        name = self.new_name_widget.text()
+        parent_id = int(self.tree.currentItem().text(0))
+        return name, parent_id
+    
+    def add_new_category_child(self, category):
+        utils.add_new_category_child_f(self.tree, category)
+    
+    def get_selected_id(self):
+        id = int(self.tree.currentItem().text(0))
+        return id

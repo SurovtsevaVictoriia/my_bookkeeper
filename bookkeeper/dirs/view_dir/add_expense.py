@@ -2,7 +2,7 @@
 import sys
 import datetime
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt 
+from . import utils
 
 # from ..presenter_dir.presenter import presenter
 
@@ -22,8 +22,8 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.tree = QtWidgets.QTreeWidget()
         self.tree.setColumnCount(3)
         self.tree.setHeaderLabels("- Категория Родитель".split())
-        # self.tree.setColumnHidden(0, False)
-        # self.tree.setColumnHidden(2, True)
+        self.tree.setColumnHidden(0, False)
+        self.tree.setColumnHidden(2, True)
 
         self.hl2 = QtWidgets.QHBoxLayout()
         self.hl2.addWidget(QtWidgets.QLabel('Категория'))
@@ -50,5 +50,23 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.vbox.addLayout(self.hl4)
         self.setLayout(self.vbox)
 
-        
+    def update_tree(self, categories_list):
+        utils.update_category_tree_f(self.tree, categories_list)
+    
+    def on_expense_added(self, slot):
+        self.add_button.clicked.connect(slot)
+
+    def get_added_expense_data(self):
+        date  = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S.%f")
+        amount = float((self.amount_widget.text())) #TODO : check datatype
+        category_name = self.tree.currentItem().text(1)
+        category_id = int(self.tree.currentItem().text(0))
+        comment = self.comment_widget.text()
+        return date, amount, category_id, category_name, comment
+
+    def on_redact_category_button_clicked(self, slot):
+        self.redact_category_button.clicked.connect(slot)
+
+    def add_new_category_child(self, category):
+        utils.add_new_category_child_f(self.tree, category)
    
