@@ -6,6 +6,7 @@ from .view_budget import BudgetTableWidget
 from .view_expense import ExpenseTableWidget
 from .add_expense import AddExpenseWidget
 from .redact_category import RedactCategoryDialog
+from .edit_expense_category import EditExpenseCategoryDialog
 
 
 class BasicLaypout(QtWidgets.QWidget):
@@ -21,11 +22,13 @@ class BasicLaypout(QtWidgets.QWidget):
     def initUI(self):
         verticalLayout = QtWidgets.QVBoxLayout(self)
 
+        
+
         self.expenses = ExpenseTableWidget()
         self.budget = BudgetTableWidget()
         self.add_expense = AddExpenseWidget()
-
         self.redact_category_dialog = RedactCategoryDialog()
+        self.edit_expense_category_dialog = EditExpenseCategoryDialog()
 
         verticalLayout.addWidget(self.budget)
         verticalLayout.addWidget(self.expenses)

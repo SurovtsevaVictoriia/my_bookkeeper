@@ -4,6 +4,7 @@ from PySide6 import QtWidgets
 from PySide6.QtGui import QCloseEvent 
 
 from . import utils
+from .category_tree import CategoryTree
 
 class RedactCategoryDialog(QtWidgets.QDialog):
 
@@ -12,14 +13,8 @@ class RedactCategoryDialog(QtWidgets.QDialog):
         self.label = QtWidgets.QLabel('Выберите категорию')
         self.vbox = QtWidgets.QVBoxLayout()
         
-        self.tree = QtWidgets.QTreeWidget()
-        self.tree.setColumnCount(3)
-        self.tree.setHeaderLabels("- Категория Родитель".split())
-        self.tree.setColumnHidden(0, False)
-        self.tree.setColumnHidden(2, True)
-        # выбираем родителя, а потом выбираем что делать:
-        # либо добавить ребенка, либо удалить
-
+        self.tree = CategoryTree()      
+          
         self.bottom_hl = QtWidgets.QHBoxLayout()
         
         self.add_vl = QtWidgets.QVBoxLayout()

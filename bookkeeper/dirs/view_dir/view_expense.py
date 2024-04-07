@@ -13,7 +13,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
             "Id Дата Сумма  Id_Категории Категория Комментарий Удалить".split()
         )
         
-        self.expenses_table.setColumnHidden(0, True)
+        self.expenses_table.setColumnHidden(0, False)
         self.expenses_table.setColumnHidden(3, True)
 
         header = self.expenses_table.horizontalHeader()
@@ -61,13 +61,29 @@ class ExpenseTableWidget(QtWidgets.QWidget):
     def on_expense_changed(self, slot)-> None:
         self.expenses_table.cellChanged.connect(slot)
 
-    def update_expenses(self, data:list[list[str]], slot):
+    def update_expenses(self, data:list[list[str]], slot_delete, slot_edit):
         self.expenses_table.setRowCount(len(data))
         utils.set_data(self.expenses_table, data)
 
         for i in range(len(data)):            
             deleteButton = QtWidgets.QPushButton("удалить")
-            deleteButton.pressed.connect(lambda x = i : slot(x))
+            deleteButton.pressed.connect(lambda x = i : slot_delete(x))
             self.expenses_table.setCellWidget(i, 6, deleteButton)
 
+            editButton = QtWidgets.QPushButton(self.expenses_table.item(i, 4).text())
+            editButton.pressed.connect(lambda x= i: slot_edit(x))
+            self.expenses_table.setCellWidget(i, 4, editButton)
             switchCatButton =  QtWidgets.QPushButton("удалить")
+    
+    def edit_expense_category(self, row, new_c_id, new_c_name, slot_edit):
+        self.expenses_table.blockSignals(True)
+        
+        c_id_item = QtWidgets.QTableWidgetItem(new_c_id)
+        self.expenses_table.setItem(row, 3, c_id_item)
+
+        editButton = QtWidgets.QPushButton(new_c_name)
+        editButton.pressed.connect(lambda x= row: slot_edit(x))
+        self.expenses_table.setCellWidget(row, 4, editButton)
+        
+        self.expenses_table.blockSignals(False)
+

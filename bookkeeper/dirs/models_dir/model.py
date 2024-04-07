@@ -23,7 +23,7 @@ class Model():
     def add_category(self, c_name, c_parent):
         c = Category(name = c_name, parent = c_parent)
         id = self.get_latest_category_id()
-        print('trying to return id', c_name,  id)
+        # print('trying to return id', c_name,  id)
         return [id, c_name, c_parent]
 
     @orm.db_session
@@ -53,7 +53,7 @@ class Model():
         lastMonday = today + datetime.timedelta(days=-today.weekday(), weeks = 0)
         lastMondayTime = datetime.datetime(lastMonday.year, lastMonday.month, lastMonday.day )
         firstDayTime = datetime.datetime(today.year, today.month, 1)
-        print(firstDayTime, lastMondayTime, todayTime )
+        # print(firstDayTime, lastMondayTime, todayTime )
         
         daily = orm.sum(e.amount for e in Expense if e.date > todayTime)
         weekly = orm.sum(e.amount for e in Expense if e.date > lastMondayTime)
@@ -70,8 +70,8 @@ class Model():
         Expense(date = _date, amount = _amount, category = _category, comment = _comment)
 
     @orm.db_session
-    def delete_expense(self, _id):
-        Expense[_id].delete()
+    def delete_expense(self, e_id):
+        Expense[e_id].delete()
     
     @orm.db_session
     def get_all_expenses_as_list_of_str(self):
@@ -83,11 +83,20 @@ class Model():
         return [[e.id, e.date, e.amount, e.category.id, e.catgory.name, e.comment ] for e in Expense]
     
     @orm.db_session
-    def edit_expense(self, id, date, amount, category, comment):
-        Expense[id].date = date
-        Expense[id].amount = amount
-        Expense[id].category = category
-        Expense[id].comment = comment
+    def edit_expense(self, e_id, date, amount, category, comment):
+        Expense[e_id].date = date
+        Expense[e_id].amount = amount
+        Expense[e_id].category = category
+        Expense[e_id].comment = comment
+    
+    @orm.db_session
+    def edit_expense_category(self, e_id, c_id):
+        Expense[e_id].category = Category[c_id]
+
+    @orm.db_session  
+    def get_c_name(self, c_id):
+        return Category[c_id].name
+
   
 
 

@@ -18,7 +18,7 @@ def update_category_tree_f( tree:QtWidgets.QTreeWidget, categories_list):
     items = []
     roots = []
     for category in categories_list:
-        print(category)
+        # print(category)
         if not category[2]:
             roots.append(category)
 
@@ -27,7 +27,7 @@ def update_category_tree_f( tree:QtWidgets.QTreeWidget, categories_list):
                                             str(category[1]),
                                             str(category[2])])
         items.append(item)
-        print(items)
+        # print(items)
     # category.parent - 1, так как id в таблицы начинаются с единицы
     # id могут идти не по порядку
 
@@ -35,7 +35,7 @@ def update_category_tree_f( tree:QtWidgets.QTreeWidget, categories_list):
         return a[pos] == value
 
     def index_of_first(lst, pred, *args):
-        print(*args)
+        # print(*args)
         for i, v in enumerate(lst):
             if pred(v,  *args):
                 return i
@@ -43,7 +43,7 @@ def update_category_tree_f( tree:QtWidgets.QTreeWidget, categories_list):
 
     for i, category in enumerate(categories_list):
         if category[2]:
-            print('in tree update', i, category, category[2] - 1 )
+            # print('in tree update', i, category, category[2] - 1 )
             idx = index_of_first(categories_list, is_value_at_pos, int(category[2]), 0)
             items[idx].addChild(items[i])
 

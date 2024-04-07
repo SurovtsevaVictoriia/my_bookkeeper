@@ -3,11 +3,12 @@ import sys
 import datetime
 from PySide6 import QtWidgets
 from . import utils
+from .category_tree import CategoryTree
 
 # from ..presenter_dir.presenter import presenter
 
 class AddExpenseWidget(QtWidgets.QWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self,  *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.label = QtWidgets.QLabel('Добавить расход')
 
@@ -19,11 +20,7 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.hl1.addWidget(self.amount_widget)
 
 
-        self.tree = QtWidgets.QTreeWidget()
-        self.tree.setColumnCount(3)
-        self.tree.setHeaderLabels("- Категория Родитель".split())
-        self.tree.setColumnHidden(0, False)
-        self.tree.setColumnHidden(2, True)
+        self.tree = CategoryTree()
 
         self.hl2 = QtWidgets.QHBoxLayout()
         self.hl2.addWidget(QtWidgets.QLabel('Категория'))
