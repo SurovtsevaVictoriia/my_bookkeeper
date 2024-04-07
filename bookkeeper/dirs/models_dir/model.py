@@ -14,6 +14,7 @@ db.generate_mapping(create_tables=True)
 class Model():
     def __init__(self):
         self.budget_filename = settings.json_name
+        self.date_format = settings.date_format
     
     def get_budget_from_file(self):
         try:
@@ -68,15 +69,18 @@ class Model():
 
     @orm.db_session
     def calculate_expenses(self) -> tuple[float, float, float]:
-        today = datetime.date.today()   
+        today = datetime.date.today()  
+        tomorrow = datetime.date.today() + datetime.timedelta(days = 1)
         todayTime = datetime.datetime(today.year, today.month, today.day)
+        tomorrowTime = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day+1)
+
         lastMonday = today + datetime.timedelta(days=-today.weekday(), weeks = 0)
         lastMondayTime = datetime.datetime(lastMonday.year, lastMonday.month, lastMonday.day )
         firstDayTime = datetime.datetime(today.year, today.month, 1)
          
-        daily = orm.sum(e.amount for e in Expense if e.date > todayTime)
-        weekly = orm.sum(e.amount for e in Expense if e.date > lastMondayTime)
-        monthly = orm.sum(e.amount for e in Expense if e.date > firstDayTime)
+        daily = orm.sum(e.amount for e in Expense if e.date > todayTime and e.date < tomorrowTime)
+        weekly = orm.sum(e.amount for e in Expense if e.date > lastMondayTime and e.date < tomorrowTime)
+        monthly = orm.sum(e.amount for e in Expense if e.date > firstDayTime and e.date < tomorrowTime)
 
         return daily, weekly, monthly
     
@@ -95,7 +99,7 @@ class Model():
     @orm.db_session
     def get_all_expenses_as_list_of_str(self):
         data = Expense.select(lambda e: 1)
-        return [[str(e.id), e.date.strftime("%m-%d-%Y %H:%M:%S.%f"), str(e.amount), str(e.category.id), e.category.name, e.comment ] for e in data]
+        return [[str(e.id), e.date.strftime(self.date_format), str(e.amount), str(e.category.id), e.category.name, e.comment ] for e in data]
     
     def get_all_expenses_as_list(self):
         data = Expense.select()

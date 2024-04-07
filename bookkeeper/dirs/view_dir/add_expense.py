@@ -4,6 +4,7 @@ import datetime
 from PySide6 import QtWidgets
 from . import utils
 from .category_tree import CategoryTree
+from ..models_dir import settings
 
 # from ..presenter_dir.presenter import presenter
 
@@ -54,7 +55,7 @@ class AddExpenseWidget(QtWidgets.QWidget):
         self.add_button.clicked.connect(slot)
 
     def get_added_expense_data(self):
-        date  = datetime.datetime.now().strftime("%m-%d-%Y %H:%M:%S.%f")
+        date  = datetime.datetime.now().strftime(settings.date_format)
         amount = float((self.amount_widget.text())) #TODO : check datatype
         category_name = self.tree.currentItem().text(1)
         category_id = int(self.tree.currentItem().text(0))

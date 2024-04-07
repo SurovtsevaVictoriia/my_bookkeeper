@@ -119,6 +119,7 @@ class _Presenter():
             self.model.edit_expense(*new_model_data )
         except ValueError:
             print('invalid data')
+            self.update_expenses()
         else:
             self.update_budget()
         
@@ -192,7 +193,7 @@ class _Presenter():
                                             -> tuple[int, datetime:datetime, float, int, str]:
         id = int(id)
         amount = float(amount)
-        date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
+        date_new = datetime.datetime.strptime(date, self.model.date_format)
         category_id = int(category_id)
         # category = self.model.get_cat_id_by_name(category_name)
         return id, date_new , amount, category_id,  comment
@@ -200,7 +201,7 @@ class _Presenter():
     def expense_data_to_model_data_without_id(self,   date:str, amount:float, category_id:int, category_name:str, comment:str)\
                                             -> tuple[datetime:datetime, float, int, str] :
         amount = float(amount)
-        date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
+        date_new = datetime.datetime.strptime(date, self.model.date_format)
         category_id = int(category_id)
         return date_new , amount, category_id, comment
 

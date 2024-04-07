@@ -35,7 +35,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         # self.expenses_table.setEditTriggers(
         #     QtWidgets.QAbstractItemView.NoEditTriggers
         # ) this disables editing
-
+        
         self.expenses_table.verticalHeader().hide()
         self.vbox = QtWidgets.QVBoxLayout()
         self.vbox.addWidget(self.label)
