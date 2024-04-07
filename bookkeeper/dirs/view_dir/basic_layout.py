@@ -31,7 +31,7 @@ class BasicLaypout(QtWidgets.QWidget):
         verticalLayout.addWidget(self.budget)
         verticalLayout.addWidget(self.expenses)
         verticalLayout.addWidget(self.add_expense)
-
+        self.setMinimumWidth(600)
         self.show()
         
     

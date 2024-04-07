@@ -51,16 +51,13 @@ class View(QtCore.QObject):
 
     def update_expenses(self, data, slot_delete, slot_edit):
         self.bl.expenses.update_expenses(data, slot_delete, slot_edit)
-            
+
+
             
     def on_redact_category_button_clicked(self, slot):
         self.bl.add_expense.on_redact_category_button_clicked(slot)
     
     def init_redact_category_dialog(self):
-       
-        print('in init dialog func')
-        # self.bl.redact_category_dialog.setModal(True)
-        # self.bl.redact_category_dialog.show()
         self.bl.redact_category_dialog.exec()
 
     def init_edit_expense_cat_dialog(self):
@@ -73,25 +70,13 @@ class View(QtCore.QObject):
         self.bl.redact_category_dialog.on_add_new_catgory_button_clicked(slot)
 
     def on_select_cat_button_clicked(self, slot, row):
-        # self.bl.edit_expense_category_dialog.on_select_cat_button_clicked(slot)
         self.bl.edit_expense_category_dialog.on_select_cat_button_clicked(slot, row)
     
     def edit_expense_category(self, row, new_c_id, new_c_name, slot_edit):
         self.bl.expenses.edit_expense_category(row, new_c_id, new_c_name, slot_edit)
-    
-    
-    
-    #TODO :check that name is not empty
-    # Maybe check that name is not repeated among children or not
+  
     def get_added_category_data(self):
-        return self.bl.redact_category_dialog.get_added_category_data()
-        
-
-    # def add_new_category_child_main_window(self, category):
-    #     self.bl.add_expense.add_new_category_child(category)
-        
-    # def add_new_category_child_dialog_window(self, category):
-    #     self.bl.redact_category_dialog.add_new_category_child(category)
+        return self.bl.redact_category_dialog.get_added_category_data()  
 
     def get_selected_in_redacter_category_id(self):
         return self.bl.redact_category_dialog.get_selected_id()

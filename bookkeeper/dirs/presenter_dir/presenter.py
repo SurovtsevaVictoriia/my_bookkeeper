@@ -112,10 +112,15 @@ class _Presenter():
             print('no category')
 
     def handle_on_expense_changed(self, row:int) -> None:
-        new_expense_data = self.view.get_expense_data_from_table_row(row)
-        new_model_data = self.expense_data_to_model_data(*new_expense_data)
-        self.model.edit_expense(*new_model_data )
-        self.update_budget()
+        try:
+            new_expense_data = self.view.get_expense_data_from_table_row(row)
+            new_model_data = self.expense_data_to_model_data(*new_expense_data)
+            self.model.edit_expense(*new_model_data )
+        except ValueError:
+            print('invalid data')
+        else:
+            self.update_budget()
+        
 
    
 

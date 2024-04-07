@@ -13,7 +13,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
             "Id Дата Сумма  Id_Категории Категория Комментарий Удалить".split()
         )
         
-        self.expenses_table.setColumnHidden(0, False)
+        self.expenses_table.setColumnHidden(0, True)
         self.expenses_table.setColumnHidden(3, True)
 
         header = self.expenses_table.horizontalHeader()
@@ -28,7 +28,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         header.setSectionResizeMode(
             4, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(
-            5, QtWidgets.QHeaderView.ResizeToContents)
+            5, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(
             6, QtWidgets.QHeaderView.ResizeToContents)
 
