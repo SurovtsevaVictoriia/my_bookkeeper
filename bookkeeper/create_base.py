@@ -20,15 +20,15 @@ import datetime
 
 
 with db_session:   
-    c = Category(name = 'All')
+    c = Category(name = 'Все категории')
 print('c', c.get_id()) 
 
 with db_session:
-    c1 = Category(name = 'Fooood', parent = c.id)
-    e1 = Expense(date = datetime.datetime(year = 2024, month=3, day = 12), amount = 3, category = c1, comment = 'cheese')
+    c1 = Category(name = 'Еда', parent = c.id)
+    e1 = Expense(date = datetime.datetime(year = 2024, month=3, day = 12), amount = 3, category = c1, comment = 'сыр')
 
 with db_session:   
-    c2 = Category(name = 'Meats', parent = c1.id)
+    c2 = Category(name = 'Одежда', parent = c1.id)
     e2 = Expense(amount = 5, category = c2, comment = 'beef' )
 
 # print(c2.expenses)

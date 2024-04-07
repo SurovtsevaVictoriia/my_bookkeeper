@@ -26,11 +26,15 @@ class RedactCategoryDialog(QtWidgets.QDialog):
         self.add_vl.addWidget(self.new_name_widget)
         self.add_vl.addWidget(self.add_new_cat_button)
 
+        
         self.delete_vl = QtWidgets.QVBoxLayout()
         self.delete_label =  QtWidgets.QLabel('Удалить категорию')
         self.delete_cat_button = QtWidgets.QPushButton('Удалить')
 
+        self.rename_button = QtWidgets.QPushButton('Переименовать')
+
         self.delete_vl.addWidget(self.delete_label)
+        self.delete_vl.addWidget(self.rename_button)
         self.delete_vl.addWidget(self.delete_cat_button)
 
         self.bottom_hl.addLayout(self.add_vl)
@@ -55,6 +59,9 @@ class RedactCategoryDialog(QtWidgets.QDialog):
     
     def on_add_new_catgory_button_clicked(self, slot):
         self.add_new_cat_button.clicked.connect(slot)
+    
+    def on_rename_category_button_clicked(self, slot):
+        self.rename_button.clicked.connect(slot)
 
     def get_added_category_data(self):
         name = self.new_name_widget.text()

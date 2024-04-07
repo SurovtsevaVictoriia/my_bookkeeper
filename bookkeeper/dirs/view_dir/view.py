@@ -69,6 +69,12 @@ class View(QtCore.QObject):
     def on_add_new_category_button_clicked(self, slot):
         self.bl.redact_category_dialog.on_add_new_catgory_button_clicked(slot)
 
+    def on_rename_category_button_clicked(self, slot):
+        self.bl.redact_category_dialog.on_rename_category_button_clicked(slot)
+
+
+
+
     def on_select_cat_button_clicked(self, slot, row):
         self.bl.edit_expense_category_dialog.on_select_cat_button_clicked(slot, row)
     

@@ -40,20 +40,27 @@ class Model():
         return [id, c_name, c_parent]
 
     @orm.db_session
-    def delete_category(self, id):
+    def delete_category(self, c_id):
         """move all children up in the hierarchy
         """
         # move all children up in the hierarchy
-        parent_id = Category[id].parent
-        children = Category.select(lambda c: c.parent == id)
+        parent_id = Category[c_id].parent
+        children = Category.select(lambda c: c.parent == c_id)
         #stupid way to do it, there is a relation for a reason but whatever
-        expenses = Expense.select(lambda e: e.category == Category[id])
-        for expense in expenses:
-            expense.category = Category[parent_id]
-        for child in children:
-            child.parent = parent_id                  
-        Category[id].delete()
-    
+        expenses = Expense.select(lambda e: e.category == Category[c_id])
+        if parent_id != None:
+            for expense in expenses:
+                expense.category = Category[parent_id]
+            for child in children:
+                child.parent = parent_id 
+            Category[c_id].delete()
+        else: 
+            print('trying to delete core category')
+                             
+    @orm.db_session
+    def rename_category(self, c_id, new_name):
+        Category[c_id].name = new_name
+
     @orm.db_session
     def get_latest_category_id(self):
         id = orm.max(c.id for c in Category)

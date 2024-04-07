@@ -39,6 +39,7 @@ class _Presenter():
         self.view.on_redact_category_button_clicked(self.handle_on_redact_category_button_clicked)
         self.view.on_delete_category_button_clicked(self.handle_on_delete_category_button_clicked)
         self.view.on_add_new_category_button_clicked(self.handle_on_add_new_category_button_clicked)
+        self.view.on_rename_category_button_clicked(self.handle_rename_category_button_clicked)
         # self.view.on_select_cat_button_clicked(self.handle_on_select_cat_button_clicked)
         sys.exit(self.on_exit())
         
@@ -175,6 +176,17 @@ class _Presenter():
             self.update_category_tree()
         else: self.update_category_tree()
     
+    def handle_rename_category_button_clicked(self):
+        print('rename button clicked')
+        try:
+            new_name, c_id = self.view.get_added_category_data()
+        except AttributeError:
+            print('no category selected')
+        else:
+            self.model.rename_category(c_id, new_name)
+            self.update_expenses()
+            self.update_category_tree()
+
     
     def expense_data_to_model_data_with_id(self, id:int,  date:str, amount:float, category_id:int, category_name:str, comment:str)\
                                             -> tuple[int, datetime:datetime, float, int, str]:
