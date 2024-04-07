@@ -12,16 +12,13 @@ db.generate_mapping(create_tables=True)
 
 class Model():
     def __init__(self):
-        self.budget_filename = 'bookkeeper/dirs/presenter_dir/budget.json'        pass
-
-
+        self.budget_filename = 'bookkeeper/dirs/presenter_dir/budget.json'
     
     @orm.db_session
     def get_all_categories_as_list(self):
         data = Category.select()
         return [[c.id, c.name, c.parent] for c in data]
-    
-    
+        
     @orm.db_session
     def add_category(self, c_name, c_parent):
         c = Category(name = c_name, parent = c_parent)
@@ -43,8 +40,6 @@ class Model():
         for child in children:
             child.parent = parent_id                  
         Category[id].delete()
-
-
     
     @orm.db_session
     def get_latest_category_id(self):
@@ -52,8 +47,7 @@ class Model():
         return id
 
     @orm.db_session
-    def calculate_expenses(self):
-        now = datetime.datetime.now()
+    def calculate_expenses(self) -> tuple[float, float, float]:
         today = datetime.date.today()   
         todayTime = datetime.datetime(today.year, today.month, today.day)
         lastMonday = today + datetime.timedelta(days=-today.weekday(), weeks = 0)

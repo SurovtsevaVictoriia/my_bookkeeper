@@ -54,8 +54,6 @@ class _Presenter():
         self.serialize_budget()
 
 
-
-
     def add_default_categories(self) -> None:
         self.model.add_category('Еда' )
         self.model.add_category('Одежда')
@@ -66,16 +64,8 @@ class _Presenter():
     def add_category(self, c_name:str, c_parent_id:int) -> None:
         self.model.add_category(c_name, c_parent_id)
 
-    # TODO
-    def get_added_category_data(self) -> tuple[str, int]:
-        new_name = ''
-        new_parent = 1
-        return new_name, new_parent
     
-    
-    
-    def calculate_expenses(self) -> tuple[float, float, float]:
-        return self.model.calculate_expenses()
+  
     
     def serialize_budget(self) -> None:
         print('budget serialized')
@@ -86,18 +76,28 @@ class _Presenter():
             json.dump(data, f)    
 
     def update_budget(self) -> None: 
-        daily, weekly, monthly = self.calculate_expenses()
+        daily, weekly, monthly = self.model.calculate_expenses()
         self.view.update_budget(daily, weekly, monthly,\
                                  self.daily_budget, self.weekly_budget, self.monthly_budget)
         print('budget updated')
 
     def handle_on_budget_changed(self, row:int, col:int) -> None:
-        if (row, col) == (0, 1):
-            self.daily_budget = self.view.get_new_budget(row, col)
-        elif (row, col) == (1, 1):
-            self.weekly_budget = self.view.get_new_budget(row, col)
-        elif (row, col) == (2, 1):
-            self.monthly_budget = self.view.get_new_budget(row, col)
+        # write in presenter state
+        try:
+            if (row, col) == (0, 1):
+                self.daily_budget = float(self.view.get_new_budget(row, col))
+            elif (row, col) == (1, 1):
+                self.weekly_budget = float(self.view.get_new_budget(row, col))
+            elif (row, col) == (2, 1):
+                self.monthly_budget = float(self.view.get_new_budget(row, col))
+        except ValueError:
+            print('Value Error occured')
+            self.update_budget()
+        else: 
+            daily, weekly, monthly = self.model.calculate_expenses()
+            self.view.recolor_budget(daily, weekly, monthly,\
+                                 self.daily_budget, self.weekly_budget, self.monthly_budget)
+            print('self.monthly_budget:', self.monthly_budget)
 
     def update_category_tree(self) -> None:
         print('in update tree')

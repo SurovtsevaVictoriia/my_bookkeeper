@@ -44,7 +44,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         # self.Update()
 
 
-    def get_expense_data_from_table_row(self, row):
+    def get_expense_data_from_table_row(self, row:int) -> tuple[str, str, str, str, str, str]:
         id = self.expenses_table.item(row, 0).text()
         date = self.expenses_table.item(row, 1).text()
         amount = self.expenses_table.item(row, 2).text()
@@ -54,14 +54,14 @@ class ExpenseTableWidget(QtWidgets.QWidget):
 
         return id, date, amount, category_id, category_name, comment
     
-    def get_expense_id_from_table_row(self, row):
+    def get_expense_id_from_table_row(self, row:int) -> int:
         id = self.expenses_table.item(row, 0).text()
         return int(id)
 
-    def on_expense_changed(self, slot):
+    def on_expense_changed(self, slot)-> None:
         self.expenses_table.cellChanged.connect(slot)
 
-    def update_expenses(self, data, slot):
+    def update_expenses(self, data:list[list[str]], slot):
         self.expenses_table.setRowCount(len(data))
         utils.set_data(self.expenses_table, data)
 
@@ -69,3 +69,5 @@ class ExpenseTableWidget(QtWidgets.QWidget):
             deleteButton = QtWidgets.QPushButton("удалить")
             deleteButton.pressed.connect(lambda x = i : slot(x))
             self.expenses_table.setCellWidget(i, 6, deleteButton)
+
+            switchCatButton =  QtWidgets.QPushButton("удалить")

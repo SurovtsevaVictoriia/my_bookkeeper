@@ -2,6 +2,7 @@ import sys
 from PySide6 import QtWidgets, QtCore
 
 def set_data(table:QtWidgets.QTableWidget, data:list[list[str]]):
+    table.blockSignals(True)
     for i, row in enumerate(data):
         for j, x in enumerate(row):
             # item = QtWidgets.QTableWidgetItem(x.capitalize())
@@ -10,6 +11,7 @@ def set_data(table:QtWidgets.QTableWidget, data:list[list[str]]):
                 i, j,
                 item
             )
+    table.blockSignals(False)
 
 def update_category_tree_f( tree:QtWidgets.QTreeWidget, categories_list): 
     tree.clear()   

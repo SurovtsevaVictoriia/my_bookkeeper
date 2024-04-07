@@ -22,6 +22,10 @@ class View(QtCore.QObject):
     def get_new_budget(self, row, col):
         return self.bl.budget.get_new_budget(row, col)      
 
+    def recolor_budget(self, daily, weekly, monthly, \
+                       daily_budget, weekly_budget, monthly_budget):
+        self.bl.budget.recolor_budget(daily, weekly, monthly, \
+                       daily_budget, weekly_budget, monthly_budget)
         
     def update_main_window_tree(self, categories_list):
         self.bl.add_expense.update_tree(categories_list)
