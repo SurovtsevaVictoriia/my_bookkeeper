@@ -20,13 +20,20 @@ class BudgetTableWidget(QtWidgets.QWidget):
         )
 
 
-        self.header = self.budget_table.horizontalHeader()
-        self.header.setSectionResizeMode(
-            0, QtWidgets.QHeaderView.ResizeToContents)
-        self.header.setSectionResizeMode(
-            1, QtWidgets.QHeaderView.ResizeToContents)
-        self.header.setSectionResizeMode(            
-            2, QtWidgets.QHeaderView.ResizeToContents)
+        self.hheader = self.budget_table.horizontalHeader()
+        self.hheader.setSectionResizeMode(
+            0, QtWidgets.QHeaderView.Stretch)
+        self.hheader.setSectionResizeMode(
+            1, QtWidgets.QHeaderView.Stretch)
+        
+        
+        self.vheader = self.budget_table.verticalHeader()
+        self.vheader.setSectionResizeMode(
+            0, QtWidgets.QHeaderView.Stretch)
+        self.vheader.setSectionResizeMode(
+            1, QtWidgets.QHeaderView.Stretch)
+        self.vheader.setSectionResizeMode(            
+            2, QtWidgets.QHeaderView.Stretch)
 
         self.vbox = QtWidgets.QVBoxLayout()
         self.vbox.addWidget(self.label)

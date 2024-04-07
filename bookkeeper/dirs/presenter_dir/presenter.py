@@ -21,11 +21,8 @@ class _Presenter():
 
         self.model = Model()
         self.view = View()        
-        with open(self.model.budget_filename, 'r') as f:
-            budget = json.load(f)
-            self.daily_budget = budget['daily']
-            self.weekly_budget = budget['weekly']
-            self.monthly_budget = budget['monthly'] 
+        self.daily_budget, self.weekly_budget, self.monthly_budget \
+                            = self.model.get_budget_from_file()
 
         self.run()    
 
@@ -62,12 +59,12 @@ class _Presenter():
         self.model.add_category(c_name, c_parent_id)  
     
     def serialize_budget(self) -> None:
-        print('budget serialized')
         with open(self.model.budget_filename, 'w') as f:
             data = {'daily': self.daily_budget, 
                     'weekly': self.weekly_budget,
                     'monthly': self.monthly_budget}
             json.dump(data, f)    
+        print('budget serialized')
 
     def update_budget(self) -> None: 
         daily, weekly, monthly = self.model.calculate_expenses()
@@ -94,7 +91,6 @@ class _Presenter():
     
 
     def update_category_tree(self) -> None:
-        print('in update tree')
         categories_list = self.model.get_all_categories_as_list()
         self.view.update_all_trees(categories_list)
        
@@ -105,31 +101,31 @@ class _Presenter():
                                         self.handle_on_edit_expense_button_clicked)
 
     def handle_on_expense_added(self) -> None:
-        expense_data = self.view.get_added_expense_data()      
-        self.model.add_expense(*self.expense_data_to_model_data(*expense_data))
-        self.update_expenses()
-        self.update_budget()    
+        try:
+            expense_data = self.view.get_added_expense_data()      
+            self.model.add_expense(*self.expense_data_to_model_data(*expense_data))
+            self.update_expenses()
+            self.update_budget()  
+        except ValueError:
+            print('wrong amount')  
+        except AttributeError:
+            print('no category')
 
     def handle_on_expense_changed(self, row:int) -> None:
         new_expense_data = self.view.get_expense_data_from_table_row(row)
-        # print('new expense data', new_expense_data)
         new_model_data = self.expense_data_to_model_data(*new_expense_data)
-        # print('new model data', new_model_data)
         self.model.edit_expense(*new_model_data )
         self.update_budget()
 
    
 
     def handle_on_delete_button_clicked(self, row:int) -> None:
-        # print(row)
-        print('handle dlete button clickred')
         expense_id = self.view.get_expense_id_from_table_row(row)
         self.model.delete_expense(expense_id)
         self.update_expenses()
         self.update_budget()   
 
     def handle_on_edit_expense_button_clicked(self, row:int) -> None:
-        print(row)       
         self.view.on_select_cat_button_clicked(self.handle_on_select_cat_button_clicked, row)
         self.view.init_edit_expense_cat_dialog()
     
@@ -141,8 +137,6 @@ class _Presenter():
 
         self.model.edit_expense_category(e_id, new_c_id)
         self.view.edit_expense_category(row, new_c_id, new_c_name, self.handle_on_edit_expense_button_clicked)
-        print('select button clicked, row = ', row, 'expense_ide ',  e_id , 'category_id ' , new_c_id )
-        pass
     
         
 
@@ -152,31 +146,33 @@ class _Presenter():
 
     def handle_on_delete_category_button_clicked(self) -> None:
         print('delete_category_button_clicked')
-        id = self.view.get_selected_in_redacter_category_id()
-        self.model.delete_category(id)
-        self.update_expenses()
-        self.update_category_tree()
+        try:
+            c_id = self.view.get_selected_in_redacter_category_id()
+        except AttributeError:
+            print('no category selected')
+        else:
+            self.model.delete_category(c_id)
+            self.update_expenses()
+            self.update_category_tree()
         
 
     def handle_on_add_new_category_button_clicked(self) -> None:
-        print('add_new_catgory_button_clicked')
+        print('add_new_category_button_clicked')
 
-        name, parent_id = self.view.get_added_category_data()
         try:
-        # Check database or current widget data?
-        # Does it defeat the purpose of having a database?
-        # print(name, parent_id)
+            name, parent_id = self.view.get_added_category_data()
             self.model.add_category(name, parent_id)
         except ValueError:
             print('empty name')
+        except AttributeError:
+            print('no parent')
+            self.model.add_category('All', None)
+            self.update_category_tree()
         else: self.update_category_tree()
-
-        # print(name, parent_id)
     
     
     def expense_data_to_model_data_with_id(self, id:int,  date:str, amount:float, category_id:int, category_name:str, comment:str)\
                                             -> tuple[int, datetime:datetime, float, int, str]:
-        print('in coverter with id')
         id = int(id)
         amount = float(amount)
         date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
@@ -186,21 +182,16 @@ class _Presenter():
 
     def expense_data_to_model_data_without_id(self,   date:str, amount:float, category_id:int, category_name:str, comment:str)\
                                             -> tuple[datetime:datetime, float, int, str] :
-        print('in coverter without id')
         amount = float(amount)
         date_new = datetime.datetime.strptime(date, "%m-%d-%Y %H:%M:%S.%f")
         category_id = int(category_id)
-        # category = self.model.get_cat_id_by_name(category_name)
         return date_new , amount, category_id, comment
 
     def expense_data_to_model_data(self, *args) -> None:
-        print(args)
         if len(args) == 5:
             return self.expense_data_to_model_data_without_id(*args)
         elif len(args) == 6:
             return self.expense_data_to_model_data_with_id(*args)
-
-
 
 
 presenter = _Presenter()

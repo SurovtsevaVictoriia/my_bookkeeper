@@ -4,7 +4,6 @@ from PySide6.QtCore import Qt
 class CategoryTree(QtWidgets.QTreeWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print('tree created')
         self.setColumnCount(3)
         self.setHeaderLabels("Id Категория Родитель".split())
         self.setColumnHidden(0, False)

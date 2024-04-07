@@ -15,8 +15,6 @@ class BasicLaypout(QtWidgets.QWidget):
         self.initUI()
         
     def closeEvent(self, event: QCloseEvent) -> None:
-        # presenter.serialize_budget()
-        print('did close event work ??')
         return super().closeEvent(event)
 
     def initUI(self):

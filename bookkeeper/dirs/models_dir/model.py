@@ -1,5 +1,6 @@
 import datetime
 from pony import orm
+import json
 
 from .base import db
 from . import settings
@@ -12,8 +13,21 @@ db.generate_mapping(create_tables=True)
 
 class Model():
     def __init__(self):
-        self.budget_filename = 'bookkeeper/dirs/presenter_dir/budget.json'
+        self.budget_filename = settings.json_name
     
+    def get_budget_from_file(self):
+        try:
+            with open(self.budget_filename, 'r') as f:
+                budget = json.loads(f.read())
+                daily_budget = budget['daily']
+                weekly_budget = budget['weekly']
+                monthly_budget = budget['monthly']
+        except Exception as e:
+            print(e.args)
+            
+        else:
+            return daily_budget, weekly_budget, monthly_budget
+        
     @orm.db_session
     def get_all_categories_as_list(self):
         data = Category.select()
@@ -21,9 +35,8 @@ class Model():
         
     @orm.db_session
     def add_category(self, c_name, c_parent):
-        c = Category(name = c_name, parent = c_parent)
+        Category(name = c_name, parent = c_parent)
         id = self.get_latest_category_id()
-        # print('trying to return id', c_name,  id)
         return [id, c_name, c_parent]
 
     @orm.db_session
@@ -53,8 +66,7 @@ class Model():
         lastMonday = today + datetime.timedelta(days=-today.weekday(), weeks = 0)
         lastMondayTime = datetime.datetime(lastMonday.year, lastMonday.month, lastMonday.day )
         firstDayTime = datetime.datetime(today.year, today.month, 1)
-        # print(firstDayTime, lastMondayTime, todayTime )
-        
+         
         daily = orm.sum(e.amount for e in Expense if e.date > todayTime)
         weekly = orm.sum(e.amount for e in Expense if e.date > lastMondayTime)
         monthly = orm.sum(e.amount for e in Expense if e.date > firstDayTime)

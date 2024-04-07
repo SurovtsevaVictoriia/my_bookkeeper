@@ -64,6 +64,3 @@ class AddExpenseWidget(QtWidgets.QWidget):
     def on_redact_category_button_clicked(self, slot):
         self.redact_category_button.clicked.connect(slot)
 
-    def add_new_category_child(self, category):
-        utils.add_new_category_child_f(self.tree, category)
-   

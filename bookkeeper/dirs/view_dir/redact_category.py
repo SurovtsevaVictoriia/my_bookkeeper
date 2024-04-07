@@ -61,9 +61,6 @@ class RedactCategoryDialog(QtWidgets.QDialog):
         parent_id = int(self.tree.currentItem().text(0))
         return name, parent_id
     
-    def add_new_category_child(self, category):
-        utils.add_new_category_child_f(self.tree, category)
-    
     def get_selected_id(self):
         id = int(self.tree.currentItem().text(0))
         return id
