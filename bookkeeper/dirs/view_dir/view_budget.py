@@ -8,7 +8,7 @@ from . import utils
 class BudgetTableWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.setBaseSize(100, 100)
         self.label = QtWidgets.QLabel('Бюджет')
 
         self.budget_table = QtWidgets.QTableWidget(3, 2)
@@ -19,19 +19,24 @@ class BudgetTableWidget(QtWidgets.QWidget):
             "День Неделя Месяц".split()
         )
 
-
-        self.header = self.budget_table.horizontalHeader()
-        self.header.setSectionResizeMode(
-            0, QtWidgets.QHeaderView.ResizeToContents)
-        self.header.setSectionResizeMode(
-            1, QtWidgets.QHeaderView.ResizeToContents)
-        self.header.setSectionResizeMode(            
-            2, QtWidgets.QHeaderView.ResizeToContents)
+        self.hheader = self.budget_table.horizontalHeader()
+        self.hheader.setSectionResizeMode(
+            0, QtWidgets.QHeaderView.Stretch)
+        self.hheader.setSectionResizeMode(
+            1, QtWidgets.QHeaderView.Stretch)
+        # self.header.setSectionResizeMode(            
+        #     2, QtWidgets.QHeaderView.ResizeToContents)
+        self.vheader = self.budget_table.verticalHeader()
+        self.vheader.setSectionResizeMode(
+            0, QtWidgets.QHeaderView.Stretch)
+        self.vheader.setSectionResizeMode(
+            1, QtWidgets.QHeaderView.Stretch)
+        self.vheader.setSectionResizeMode(
+            2, QtWidgets.QHeaderView.Stretch)
 
         self.vbox = QtWidgets.QVBoxLayout()
         self.vbox.addWidget(self.label)
         self.vbox.addWidget(self.budget_table)
-
         self.setLayout(self.vbox)
 
     def update_budget(self, daily, weekly, monthly, daily_budget, weekly_budget, monthly_budget):

@@ -105,18 +105,29 @@ class _Presenter():
                                         self.handle_on_edit_expense_button_clicked)
 
     def handle_on_expense_added(self) -> None:
-        expense_data = self.view.get_added_expense_data()      
-        self.model.add_expense(*self.expense_data_to_model_data(*expense_data))
-        self.update_expenses()
-        self.update_budget()    
+        try:
+            expense_data = self.view.get_added_expense_data()      
+            self.model.add_expense(*self.expense_data_to_model_data(*expense_data))
+        except ValueError:
+            print('empty amount')
+        except AttributeError:
+            print('empty category')
+        else:
+            self.update_expenses()
+            self.update_budget()    
 
     def handle_on_expense_changed(self, row:int) -> None:
-        new_expense_data = self.view.get_expense_data_from_table_row(row)
-        # print('new expense data', new_expense_data)
-        new_model_data = self.expense_data_to_model_data(*new_expense_data)
-        # print('new model data', new_model_data)
-        self.model.edit_expense(*new_model_data )
-        self.update_budget()
+        try:
+            new_expense_data = self.view.get_expense_data_from_table_row(row)
+            # print('new expense data', new_expense_data)
+            new_model_data = self.expense_data_to_model_data(*new_expense_data)
+            # print('new model data', new_model_data)
+        except ValueError:
+            print('wrong format')
+            self.update_expenses()
+        else:
+            self.model.edit_expense(*new_model_data )
+            self.update_budget()
 
    
 
@@ -161,12 +172,16 @@ class _Presenter():
     def handle_on_add_new_category_button_clicked(self) -> None:
         print('add_new_catgory_button_clicked')
 
-        name, parent_id = self.view.get_added_category_data()
         try:
+            name, parent_id = self.view.get_added_category_data()
         # Check database or current widget data?
         # Does it defeat the purpose of having a database?
         # print(name, parent_id)
             self.model.add_category(name, parent_id)
+        except AttributeError:
+            self.model.add_category('All', None)
+            self.update_category_tree()
+            print('everythin empty')
         except ValueError:
             print('empty name')
         else: self.update_category_tree()

@@ -21,7 +21,10 @@ class Model():
         
     @orm.db_session
     def add_category(self, c_name, c_parent):
-        c = Category(name = c_name, parent = c_parent)
+        if c_parent == None:
+            Category(name = c_name)
+        else: 
+            Category(name = c_name, parent = c_parent)
         id = self.get_latest_category_id()
         # print('trying to return id', c_name,  id)
         return [id, c_name, c_parent]

@@ -21,11 +21,10 @@ class BasicLaypout(QtWidgets.QWidget):
 
     def initUI(self):
         verticalLayout = QtWidgets.QVBoxLayout(self)
-
-        
-
         self.expenses = ExpenseTableWidget()
         self.budget = BudgetTableWidget()
+    
+
         self.add_expense = AddExpenseWidget()
         self.redact_category_dialog = RedactCategoryDialog()
         self.edit_expense_category_dialog = EditExpenseCategoryDialog()
@@ -33,7 +32,7 @@ class BasicLaypout(QtWidgets.QWidget):
         verticalLayout.addWidget(self.budget)
         verticalLayout.addWidget(self.expenses)
         verticalLayout.addWidget(self.add_expense)
-
+        self.setFixedWidth(600)
         self.show()
         
     

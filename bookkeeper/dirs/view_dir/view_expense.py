@@ -28,7 +28,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
         header.setSectionResizeMode(
             4, QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(
-            5, QtWidgets.QHeaderView.ResizeToContents)
+            5, QtWidgets.QHeaderView.Stretch)
         header.setSectionResizeMode(
             6, QtWidgets.QHeaderView.ResizeToContents)
 
@@ -77,7 +77,7 @@ class ExpenseTableWidget(QtWidgets.QWidget):
     
     def edit_expense_category(self, row, new_c_id, new_c_name, slot_edit):
         self.expenses_table.blockSignals(True)
-        
+
         c_id_item = QtWidgets.QTableWidgetItem(new_c_id)
         self.expenses_table.setItem(row, 3, c_id_item)
 
