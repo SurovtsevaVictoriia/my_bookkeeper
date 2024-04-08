@@ -2,4 +2,4 @@ from inspect import isgenerator
 
 import pytest
 
-from bookkeeper.models_dir.category import Category
+from bookkeeper.dirs.models_dir.category import Category

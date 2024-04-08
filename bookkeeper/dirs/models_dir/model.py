@@ -24,7 +24,12 @@ class Model():
                 weekly_budget = budget['weekly']
                 monthly_budget = budget['monthly']
         except Exception as e:
-            print(e.args)
+            with open(self.budget_filename, 'w') as f:
+                data = {'daily': 1000, 
+                        'weekly': 5000,
+                        'monthly': 15000}
+                json.dump(data, f) 
+                return daily_budget, weekly_budget, monthly_budget
             
         else:
             return daily_budget, weekly_budget, monthly_budget
