@@ -173,8 +173,8 @@ class _Presenter():
             print('empty name')
         except AttributeError:
             print('no parent')
-            self.model.add_category('All', None)
-            self.update_category_tree()
+            # self.model.add_category('All', None)
+            # self.update_category_tree()
         else: self.update_category_tree()
     
     def handle_rename_category_button_clicked(self):
@@ -183,6 +183,8 @@ class _Presenter():
             new_name, c_id = self.view.get_added_category_data()
         except AttributeError:
             print('no category selected')
+        except ValueError:
+            print('empty name')
         else:
             self.model.rename_category(c_id, new_name)
             self.update_expenses()
