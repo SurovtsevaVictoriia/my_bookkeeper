@@ -12,20 +12,20 @@ class Expense(db.Entity):
     comment = Optional(str)
 
     @db_session
-    def get_expense_by_id(e_id):
+    def get_expense_by_id(e_id:int)->None:
         return Expense[e_id]
 
     @db_session
-    def get_expenses_in_category(c_id):
+    def get_expenses_in_category(c_id:int) -> pony.orm.core.Query:
         return Expense.select(lambda e: e.category.get_id() == c_id)
     
     @db_session
-    def get_all_expenses_as_list_of_str():
+    def get_all_expenses_as_list_of_str() -> list[list[str]]:
         data = Expense.select(lambda e: 1)
         return [[str(e.id), e.date.strftime(settings.date_format), str(e.amount), str(e.category.id), e.category.name, e.comment ] for e in data]
     
     @db_session
-    def reassign_category(self, new_c):
+    def reassign_category(self, new_c) -> None:
         self.category = new_c
     
 
@@ -47,15 +47,15 @@ class Expense(db.Entity):
         return daily, weekly, monthly
     
     @db_session
-    def add_expense(e_date, e_amount, e_category, e_comment ):
+    def add_expense(e_date, e_amount, e_category, e_comment ) -> None:
         Expense(date = e_date, amount = e_amount, category = e_category, comment = e_comment)
 
     @db_session
-    def delete_expense(e_id):
+    def delete_expense(e_id:int) -> None:
         Expense[e_id].delete()
 
     @db_session
-    def edit_expense(e_id, date, amount, category, comment):
+    def edit_expense(e_id, date, amount, category, comment) -> None:
         Expense[e_id].date = date
         Expense[e_id].amount = amount
         Expense[e_id].category = category

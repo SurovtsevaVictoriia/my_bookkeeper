@@ -8,17 +8,6 @@ from dirs.models_dir import db, Category, Expense
 import dirs.models_dir.settings as settings
 import datetime
 
-
-# from dirs.models_dir.model import db as db
-
-# db.bind(**settings.db_params)
-# db.generate_mapping(create_tables=True)
-
-
-# db.create_tables()
-# db.generate_mapping()
-
-
 with db_session:   
     c = Category(name = 'Все категории')
 print('c', c.get_id()) 
@@ -30,11 +19,5 @@ with db_session:
 with db_session:   
     c2 = Category(name = 'Одежда', parent = c1.id)
     e2 = Expense(amount = 5, category = c2, comment = 'beef' )
-
-# print(c2.expenses)
-
-
-# tester.recalculate_budget()
-
 
 # db.drop_all_tables(with_all_data = True)
