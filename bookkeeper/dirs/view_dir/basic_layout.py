@@ -10,17 +10,18 @@ from .edit_expense_category import EditExpenseCategoryDialog
 
 
 class BasicLaypout(QtWidgets.QWidget):
+    """Basic Layout with all the widget apart from dialog windows
+    """
+
     def __init__(self):
         super(BasicLaypout, self).__init__()
         self.initUI()
-        
+
     def closeEvent(self, event: QCloseEvent) -> None:
         return super().closeEvent(event)
 
     def initUI(self):
         verticalLayout = QtWidgets.QVBoxLayout(self)
-
-        
 
         self.expenses = ExpenseTableWidget()
         self.budget = BudgetTableWidget()
@@ -33,6 +34,3 @@ class BasicLaypout(QtWidgets.QWidget):
         verticalLayout.addWidget(self.add_expense)
         self.setMinimumWidth(600)
         self.show()
-        
-    
-

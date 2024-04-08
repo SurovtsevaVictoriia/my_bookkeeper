@@ -1,2 +1,2 @@
-print(f'Файл __init__.py в пакете {__name__}')
 from . import presenter
+print(f'Файл __init__.py в пакете {__name__}')

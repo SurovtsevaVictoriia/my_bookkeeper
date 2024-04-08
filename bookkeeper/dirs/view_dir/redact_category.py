@@ -1,22 +1,25 @@
 import sys
 import datetime
 from PySide6 import QtWidgets
-from PySide6.QtGui import QCloseEvent 
+from PySide6.QtGui import QCloseEvent
 
 from . import utils
 from .category_tree import CategoryTree
 
+
 class RedactCategoryDialog(QtWidgets.QDialog):
 
     def __init__(self, *args, **kwargs):
+        """Redact Category Tree
+        """
         super().__init__(*args, **kwargs)
         self.label = QtWidgets.QLabel('Выберите категорию')
         self.vbox = QtWidgets.QVBoxLayout()
-        
-        self.tree = CategoryTree()      
-          
+
+        self.tree = CategoryTree()
+
         self.bottom_hl = QtWidgets.QHBoxLayout()
-        
+
         self.add_vl = QtWidgets.QVBoxLayout()
         self.add_label = QtWidgets.QLabel('Добавить новую категорию')
         self.new_name_widget = QtWidgets.QLineEdit()
@@ -26,9 +29,8 @@ class RedactCategoryDialog(QtWidgets.QDialog):
         self.add_vl.addWidget(self.new_name_widget)
         self.add_vl.addWidget(self.add_new_cat_button)
 
-        
         self.delete_vl = QtWidgets.QVBoxLayout()
-        self.delete_label =  QtWidgets.QLabel('Удалить категорию')
+        self.delete_label = QtWidgets.QLabel('Удалить категорию')
         self.delete_cat_button = QtWidgets.QPushButton('Удалить')
 
         self.rename_button = QtWidgets.QPushButton('Переименовать')
@@ -45,7 +47,7 @@ class RedactCategoryDialog(QtWidgets.QDialog):
         self.vbox.addLayout(self.bottom_hl)
 
         self.setLayout(self.vbox)
-    
+
     def closeEvent(self, arg__1: QCloseEvent) -> None:
         self.new_name_widget.setText('')
         print('dialog window cleared')
@@ -56,10 +58,10 @@ class RedactCategoryDialog(QtWidgets.QDialog):
 
     def on_delete_category_button_clicked(self, slot):
         self.delete_cat_button.clicked.connect(slot)
-    
+
     def on_add_new_catgory_button_clicked(self, slot):
         self.add_new_cat_button.clicked.connect(slot)
-    
+
     def on_rename_category_button_clicked(self, slot):
         self.rename_button.clicked.connect(slot)
 
@@ -67,7 +69,7 @@ class RedactCategoryDialog(QtWidgets.QDialog):
         name = self.new_name_widget.text()
         parent_id = int(self.tree.currentItem().text(0))
         return name, parent_id
-    
+
     def get_selected_id(self):
-        id = int(self.tree.currentItem().text(0))
-        return id
+        c_id = int(self.tree.currentItem().text(0))
+        return c_id

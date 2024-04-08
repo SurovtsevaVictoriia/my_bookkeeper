@@ -5,7 +5,10 @@ from . import utils
 # import utils
 # from ..presenter_dir.presenter import presenter
 
+
 class BudgetTableWidget(QtWidgets.QWidget):
+    """Table with Budget: currently spent and set limit.
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -19,20 +22,18 @@ class BudgetTableWidget(QtWidgets.QWidget):
             "День Неделя Месяц".split()
         )
 
-
         self.hheader = self.budget_table.horizontalHeader()
         self.hheader.setSectionResizeMode(
             0, QtWidgets.QHeaderView.Stretch)
         self.hheader.setSectionResizeMode(
             1, QtWidgets.QHeaderView.Stretch)
-        
-        
+
         self.vheader = self.budget_table.verticalHeader()
         self.vheader.setSectionResizeMode(
             0, QtWidgets.QHeaderView.Stretch)
         self.vheader.setSectionResizeMode(
             1, QtWidgets.QHeaderView.Stretch)
-        self.vheader.setSectionResizeMode(            
+        self.vheader.setSectionResizeMode(
             2, QtWidgets.QHeaderView.Stretch)
 
         self.vbox = QtWidgets.QVBoxLayout()
@@ -42,16 +43,16 @@ class BudgetTableWidget(QtWidgets.QWidget):
         self.setLayout(self.vbox)
 
     def update_budget(self, daily, weekly, monthly, daily_budget, weekly_budget, monthly_budget):
-        utils.set_data(self.budget_table, [[str(daily), str(daily_budget)], 
-                                           [str(weekly), str(weekly_budget)], 
+        utils.set_data(self.budget_table, [[str(daily), str(daily_budget)],
+                                           [str(weekly), str(weekly_budget)],
                                            [str(monthly), str(monthly_budget)]])
-        for i in range(self.budget_table.rowCount()): #make sum uneditable
+        for i in range(self.budget_table.rowCount()):  # make sum uneditable
             item = self.budget_table.item(i, 0)
-            item.setFlags(Qt.NoItemFlags) 
+            item.setFlags(Qt.NoItemFlags)
 
-        self.recolor_budget(daily, weekly, monthly, daily_budget, weekly_budget, monthly_budget)
+        self.recolor_budget(daily, weekly, monthly,
+                            daily_budget, weekly_budget, monthly_budget)
 
-        
     def recolor_budget(self, daily, weekly, monthly, daily_budget, weekly_budget, monthly_budget):
         if daily > daily_budget:
             self.budget_table.item(0, 0).setBackground(Qt.red)
